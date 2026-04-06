@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ZERO TO HERO — Workout Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080808;--bg2:#111;--bg3:#181818;--bg4:#1e1e1e;
+  --border:#252525;--border2:#2e2e2e;
+  --text:#e8e8e8;--text2:#999;--text3:#555;
+  --gold:#f5a623;--gold2:#d4891a;--blue:#4fc3f7;--green:#66bb6a;--red:#ef5350;--purple:#ab47bc;
+}
+html,body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;overscroll-behavior:none}
+
+/* HEADER */
+.header{background:linear-gradient(180deg,#0d0d0d 0%,#080808 100%);padding:22px 16px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.header-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:var(--text3);margin-bottom:4px}
+.header-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#fff;letter-spacing:2px;line-height:1}
+.header-title span{color:var(--gold)}
+.header-sub{font-size:11px;color:var(--text3);margin-top:5px;letter-spacing:0.5px}
+
+/* TABS */
+.tabs{display:flex;overflow-x:auto;background:#0a0a0a;border-bottom:1px solid var(--border);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{flex-shrink:0;padding:12px 14px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;border:none;border-bottom:2px solid transparent;background:transparent;color:var(--text3);cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* CONTENT */
+.content{padding:14px;max-width:680px;margin:0 auto}
+.session{display:none}.session.active{display:block}
+
+/* SESSION CARD */
+.session-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.session-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.session-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:#fff;letter-spacing:1px}
+.session-tagline{font-size:12px;color:var(--text2);margin-top:3px}
+.session-meta{text-align:right;flex-shrink:0}
+.session-duration{font-size:12px;color:var(--blue);font-weight:600}
+.session-equip{font-size:11px;color:var(--text3);margin-top:2px}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.tag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 8px;border-radius:4px;border:1px solid}
+
+/* SECTION BLOCKS */
+.block{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.block-header{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--border);justify-content:space-between}
+.block-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px}
+.block-note{font-size:9px;color:var(--text3);letter-spacing:0.5px}
+
+/* TABLE HEADER */
+.tbl-head{display:grid;grid-template-columns:1fr 38px 72px;padding:6px 16px;background:#0a0a0a;border-bottom:1px solid var(--border)}
+.tbl-head span{font-family:'Barlow Condensed',sans-serif;font-size:9px;color:var(--text3);font-weight:700;letter-spacing:1px}
+.tbl-head span:not(:first-child){text-align:center}
+
+/* ROWS */
+.row{padding:9px 16px;border-bottom:1px solid #141414}
+.row:last-child{border-bottom:none}
+.row:nth-child(even){background:#0f0f0f}
+.row-main{display:grid;grid-template-columns:1fr 38px 72px;align-items:center;gap:4px}
+.row-ex{font-size:13px;color:var(--text);font-weight:500}
+.row-sets{font-size:13px;color:var(--blue);font-weight:700;text-align:center}
+.row-reps{font-size:12px;color:#9c7be8;font-weight:600;text-align:center}
+.row-note{font-size:11px;color:var(--text3);margin-top:3px;line-height:1.4}
+
+/* STRETCH LIST */
+.stretch-item{display:flex;align-items:flex-start;gap:10px;padding:8px 16px;border-bottom:1px solid #141414}
+.stretch-item:last-child{border-bottom:none}
+.stretch-item:nth-child(even){background:#0f0f0f}
+.stretch-dot{color:var(--green);font-size:8px;margin-top:4px;flex-shrink:0}
+.stretch-text{font-size:13px;color:#bbb}
+
+/* WARMUP ROWS */
+.wu-row{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;border-bottom:1px solid #141414}
+.wu-row:last-child{border-bottom:none}
+.wu-row:nth-child(even){background:#0f0f0f}
+.wu-name{font-size:13px;color:#ccc}
+.wu-sets{font-size:11px;color:var(--text2);font-weight:600;text-align:right;max-width:50%}
+
+/* PLAN B */
+.planb{background:#131000;border:1px solid #3a2800;border-radius:14px;padding:13px 15px;margin-bottom:12px}
+.planb-title{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:6px}
+.planb-body{font-size:12px;color:#888;line-height:1.6}
+.planb-body strong{color:#ccc}
+.planb-win{color:var(--gold);font-weight:600}
+
+/* MATRIX */
+.matrix-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.matrix{width:100%;border-collapse:collapse;font-size:11px;min-width:460px}
+table.matrix th{padding:7px 10px;font-family:'Barlow Condensed',sans-serif;font-size:9px;color:var(--text3);font-weight:700;letter-spacing:1px;background:#0a0a0a;text-align:center}
+table.matrix th:first-child{text-align:left}
+table.matrix td{padding:6px 10px;border-bottom:1px solid #141414;text-align:center}
+table.matrix td:first-child{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:#aaa;font-weight:700;letter-spacing:0.5px;text-align:left}
+table.matrix tr:nth-child(even) td{background:#0f0f0f}
+.chk{color:var(--blue);font-size:13px}
+.dash{color:#222;font-size:11px}
+
+/* SUPPLEMENTS */
+.supp-grid{display:flex;flex-wrap:wrap;gap:6px;padding:12px 14px}
+.supp-pill{font-size:11px;color:var(--text2);padding:5px 10px;background:var(--bg3);border-radius:6px;border:1px solid var(--border2)}
+
+/* RECOVERY SPECIAL */
+.rec-note{font-size:12px;color:var(--text2);padding:10px 16px;border-bottom:1px solid var(--border);font-style:italic}
+
+/* FOOTER */
+.footer{text-align:center;padding:24px 16px;font-family:'Barlow Condensed',sans-serif;font-size:10px;color:var(--text3);letter-spacing:2px}
+
+/* ANIMATIONS */
+.session.active .block{animation:fadeUp .25s ease both}
+.session.active .block:nth-child(2){animation-delay:.04s}
+.session.active .block:nth-child(3){animation-delay:.08s}
+.session.active .block:nth-child(4){animation-delay:.12s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">DR. JOHN RUSIN 6×6 · PPL + UPPER/LOWER</div>
+  <div class="header-title">ZERO <span>TO</span> HERO</div>
+  <div class="header-sub">71kg · 176cm · Phase 1: No Direct Spinal Load · 5 Training Days/Week</div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab-btn active" onclick="switchTab('pull',this)">🔴 PULL</button>
+  <button class="tab-btn" onclick="switchTab('push',this)">🔵 PUSH</button>
+  <button class="tab-btn" onclick="switchTab('legs',this)">🟢 LEGS</button>
+  <button class="tab-btn" onclick="switchTab('upper',this)">🟡 UPPER</button>
+  <button class="tab-btn" onclick="switchTab('lower',this)">🟠 LOWER</button>
+  <button class="tab-btn" onclick="switchTab('recovery',this)">⚪ RECOVERY</button>
+  <button class="tab-btn" onclick="switchTab('hobby',this)">🏀 HOBBY</button>
+  <button class="tab-btn" onclick="switchTab('matrix',this)">📊 6×6</button>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════ PULL ═══════════════ -->
+<div class="session active" id="pull">
+  <div class="session-card">
+    <div class="session-top">
+      <div><div class="session-name">🔴 PULL DAY</div><div class="session-tagline">Back · Biceps · Carry · Posture Rebuild</div></div>
+      <div class="session-meta"><div class="session-duration">⏱ ~60 min</div><div class="session-equip">🏋 Full Gym</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag" style="background:#0d2a0d;color:#6ab86a;border-color:#1a3a1a">PULL</span>
+      <span class="tag" style="background:#1a0d2a;color:#a87ccc;border-color:#2a1a3a">CARRY</span>
+      <span class="tag" style="background:#1e1200;color:#d4a060;border-color:#2a1a0a">STRENGTH</span>
+      <span class="tag" style="background:#1e1a00;color:#d4c840;border-color:#2a2000">HYPERTROPHY</span>
+      <span class="tag" style="background:#1a1a1a;color:#aaa;border-color:#333">MOBILITY</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#f5a623">🔥 RAMP WARM-UP</div><div class="block-note">MANDATORY — NEVER SKIP</div></div>
+    <div class="wu-row"><span class="wu-name">Cat-Cows</span><span class="wu-sets">10 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Thoracic Windmills</span><span class="wu-sets">8 each side</span></div>
+    <div class="wu-row"><span class="wu-name">Chin Tucks (Neck Retractions)</span><span class="wu-sets">12 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Glute Bridges</span><span class="wu-sets">15 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Bird-Dogs</span><span class="wu-sets">10 each side</span></div>
+    <div class="wu-row"><span class="wu-name">Cable Face Pulls (light)</span><span class="wu-sets">15 reps — sub for bands</span></div>
+    <div class="wu-row"><span class="wu-name">Bodyweight Hip Hinges</span><span class="wu-sets">10 reps</span></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#4fc3f7">💪 MAIN WORKOUT</div></div>
+    <div class="tbl-head"><span>EXERCISE</span><span>SETS</span><span>REPS</span></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Chest-Supported DB Row</span><span class="row-sets">4</span><span class="row-reps">5</span></div><div class="row-note">HEAVY — Strength Block. Back isolated, zero spinal load.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Seated Cable Row</span><span class="row-sets">4</span><span class="row-reps">8–10</span></div><div class="row-note">Hypertrophy. Control the eccentric.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Lat Pulldown</span><span class="row-sets">3</span><span class="row-reps">10–12</span></div><div class="row-note">Hypertrophy. Full stretch at top.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Single-Arm DB Row</span><span class="row-sets">3</span><span class="row-reps">10–12</span></div><div class="row-note">Hypertrophy. Brace the core hard.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Cable Face Pull</span><span class="row-sets">3</span><span class="row-reps">15</span></div><div class="row-note">NON-NEGOTIABLE. Rounded shoulders fix.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">DB Bicep Curl</span><span class="row-sets">3</span><span class="row-reps">12</span></div><div class="row-note">Hypertrophy.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Hammer Curl</span><span class="row-sets">2</span><span class="row-reps">12</span></div><div class="row-note">Hypertrophy. Brachialis + grip.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Farmer's Walk</span><span class="row-sets">3</span><span class="row-reps">40m</span></div><div class="row-note">CARRY. Core brace + grip strength.</div></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#66bb6a">🧘 POST-WORKOUT STRETCHES</div></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Lat stretch (overhead/doorway) — 30 sec each side ×2</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Pec/chest stretch — 30 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Trap & neck stretch — 30 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Hip flexor lunge stretch — 30 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Child's pose — 60 sec</span></div>
+  </div>
+  <div class="planb"><div class="planb-title">⚡ PLAN B — OCPD OVERRIDE</div><div class="planb-body">No gym? Deploy the 15-min home circuit: <strong>3× Max Push-ups → 3× BW Bulgarian Split Squats → 3× Plank to failure → 3× Isometric Towel Rows.</strong><br/><span class="planb-win">This is a 100% successful Beta Deployment. No guilt. No exceptions.</span></div></div>
+</div>
+
+<!-- ═══════════════ PUSH ═══════════════ -->
+<div class="session" id="push">
+  <div class="session-card">
+    <div class="session-top">
+      <div><div class="session-name">🔵 PUSH DAY</div><div class="session-tagline">Chest · Shoulders · Triceps · Shoulder Health</div></div>
+      <div class="session-meta"><div class="session-duration">⏱ ~55 min</div><div class="session-equip">🏋 Full Gym</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag" style="background:#0d1a2a;color:#5ab0d8;border-color:#1a2a3a">PUSH</span>
+      <span class="tag" style="background:#1e1200;color:#d4a060;border-color:#2a1a0a">STRENGTH</span>
+      <span class="tag" style="background:#1e1a00;color:#d4c840;border-color:#2a2000">HYPERTROPHY</span>
+      <span class="tag" style="background:#1a1a1a;color:#aaa;border-color:#333">MOBILITY</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#f5a623">🔥 RAMP WARM-UP</div><div class="block-note">MANDATORY — NEVER SKIP</div></div>
+    <div class="wu-row"><span class="wu-name">Cat-Cows</span><span class="wu-sets">10 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Thoracic Windmills</span><span class="wu-sets">8 each side</span></div>
+    <div class="wu-row"><span class="wu-name">Chin Tucks</span><span class="wu-sets">12 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Glute Bridges</span><span class="wu-sets">15 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Wall Slides</span><span class="wu-sets">12 reps — rotator cuff activation</span></div>
+    <div class="wu-row"><span class="wu-name">Push-up to Down Dog</span><span class="wu-sets">8 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Bird-Dogs</span><span class="wu-sets">10 each side</span></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#4fc3f7">💪 MAIN WORKOUT</div></div>
+    <div class="tbl-head"><span>EXERCISE</span><span>SETS</span><span>REPS</span></div>
+    <div class="row"><div class="row-main"><span class="row-ex">DB Floor Press</span><span class="row-sets">4</span><span class="row-reps">5</span></div><div class="row-note">HEAVY — Limits ROM. Protects shoulder joint.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Incline DB Press</span><span class="row-sets">4</span><span class="row-reps">10</span></div><div class="row-note">Hypertrophy. Upper chest + anterior delt.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Cable Chest Fly</span><span class="row-sets">3</span><span class="row-reps">12–15</span></div><div class="row-note">Hypertrophy. Full stretch at extension.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">DB Lateral Raise</span><span class="row-sets">3</span><span class="row-reps">15</span></div><div class="row-note">Hypertrophy. Medial delt. Strict form only.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Cable Lateral Raise</span><span class="row-sets">2</span><span class="row-reps">15</span></div><div class="row-note">Hypertrophy. Constant tension.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Tricep Cable Pushdown</span><span class="row-sets">3</span><span class="row-reps">12</span></div><div class="row-note">Hypertrophy.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Overhead DB Tricep Extension</span><span class="row-sets">3</span><span class="row-reps">12</span></div><div class="row-note">Hypertrophy. Long head stretch.</div></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#66bb6a">🧘 POST-WORKOUT STRETCHES</div></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Doorway chest stretch — 30 sec ×2</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Tricep overhead stretch — 30 sec each arm</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Cross-body shoulder stretch — 30 sec each</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Thoracic extension over bench edge — 60 sec</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Child's pose — 60 sec</span></div>
+  </div>
+  <div class="planb"><div class="planb-title">⚡ PLAN B — OCPD OVERRIDE</div><div class="planb-body">No gym? Deploy the 15-min home circuit: <strong>3× Max Push-ups → 3× BW Bulgarian Split Squats → 3× Plank to failure → 3× Isometric Towel Rows.</strong><br/><span class="planb-win">This is a 100% successful Beta Deployment. No guilt. No exceptions.</span></div></div>
+</div>
+
+<!-- ═══════════════ LEGS ═══════════════ -->
+<div class="session" id="legs">
+  <div class="session-card">
+    <div class="session-top">
+      <div><div class="session-name">🟢 LEGS DAY</div><div class="session-tagline">Squat · Hinge · Lunge · Power · Conditioning</div></div>
+      <div class="session-meta"><div class="session-duration">⏱ ~65 min</div><div class="session-equip">🏋 Full Gym</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag" style="background:#0d2a0d;color:#6ab86a;border-color:#1a3a1a">SQUAT</span>
+      <span class="tag" style="background:#0d2a0d;color:#6ab86a;border-color:#1a3a1a">HINGE</span>
+      <span class="tag" style="background:#0d2a0d;color:#6ab86a;border-color:#1a3a1a">LUNGE</span>
+      <span class="tag" style="background:#2a0d0d;color:#e87070;border-color:#3a1a1a">POWER</span>
+      <span class="tag" style="background:#1e1200;color:#d4a060;border-color:#2a1a0a">STRENGTH</span>
+      <span class="tag" style="background:#1e1a00;color:#d4c840;border-color:#2a2000">HYPERTROPHY</span>
+      <span class="tag" style="background:#001e1e;color:#50c8c8;border-color:#003a3a">CONDITIONING</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#f5a623">🔥 RAMP WARM-UP</div><div class="block-note">MANDATORY — EXTRA GLUTE FOCUS</div></div>
+    <div class="wu-row"><span class="wu-name">Cat-Cows</span><span class="wu-sets">10 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Hip Circles</span><span class="wu-sets">10 each direction</span></div>
+    <div class="wu-row"><span class="wu-name">Glute Bridges</span><span class="wu-sets">20 reps — extra activation</span></div>
+    <div class="wu-row"><span class="wu-name">Bird-Dogs</span><span class="wu-sets">12 each side</span></div>
+    <div class="wu-row"><span class="wu-name">Bodyweight Reverse Lunge</span><span class="wu-sets">10 each side</span></div>
+    <div class="wu-row"><span class="wu-name">BW Goblet Squat (form focus)</span><span class="wu-sets">10 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Leg Swings (F/B + Lateral)</span><span class="wu-sets">10 each direction</span></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#4fc3f7">💪 MAIN WORKOUT</div></div>
+    <div class="tbl-head"><span>EXERCISE</span><span>SETS</span><span>REPS</span></div>
+    <div class="row"><div class="row-main"><span class="row-ex">KB / DB Swing</span><span class="row-sets">3</span><span class="row-reps">10</span></div><div class="row-note">POWER — Light weight, max speed. Hip hinge pattern.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Heavy Goblet Squat</span><span class="row-sets">4</span><span class="row-reps">5</span></div><div class="row-note">STRENGTH — No spinal load. Upright torso.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">DB Romanian Deadlift (RDL)</span><span class="row-sets">4</span><span class="row-reps">8</span></div><div class="row-note">HINGE — Glutes + hamstrings. Feel the stretch.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Bulgarian Split Squat</span><span class="row-sets">3</span><span class="row-reps">10 ea.</span></div><div class="row-note">LUNGE — Hypertrophy. Fixes bilateral imbalances.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Leg Press</span><span class="row-sets">3</span><span class="row-reps">12</span></div><div class="row-note">SQUAT — Hypertrophy support. Safe for the back.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Lying Leg Curl</span><span class="row-sets">3</span><span class="row-reps">12</span></div><div class="row-note">HINGE isolation. Hamstring hypertrophy.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Standing Calf Raise</span><span class="row-sets">3</span><span class="row-reps">15</span></div><div class="row-note">Hypertrophy.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">High-Incline Treadmill Walk</span><span class="row-sets">—</span><span class="row-reps">10 min</span></div><div class="row-note">CONDITIONING — Zero spinal impact.</div></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#66bb6a">🧘 POST-WORKOUT STRETCHES</div></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Hip flexor lunge stretch — 45 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Hamstring stretch (standing/lying) — 45 sec each</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Pigeon pose — 60 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Quad stretch — 30 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Calf stretch (wall) — 30 sec each</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Child's pose — 60 sec</span></div>
+  </div>
+  <div class="planb"><div class="planb-title">⚡ PLAN B — OCPD OVERRIDE</div><div class="planb-body">No gym? Deploy the 15-min home circuit: <strong>3× Max Push-ups → 3× BW Bulgarian Split Squats → 3× Plank to failure → 3× Isometric Towel Rows.</strong><br/><span class="planb-win">This is a 100% successful Beta Deployment. No guilt. No exceptions.</span></div></div>
+</div>
+
+<!-- ═══════════════ UPPER ═══════════════ -->
+<div class="session" id="upper">
+  <div class="session-card">
+    <div class="session-top">
+      <div><div class="session-name">🟡 UPPER DAY</div><div class="session-tagline">Push + Pull · 2:1 Ratio · Posture Priority</div></div>
+      <div class="session-meta"><div class="session-duration">⏱ ~55 min</div><div class="session-equip">🏋 Uni / Full Gym</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag" style="background:#0d1a2a;color:#5ab0d8;border-color:#1a2a3a">PUSH</span>
+      <span class="tag" style="background:#0d2a0d;color:#6ab86a;border-color:#1a3a1a">PULL</span>
+      <span class="tag" style="background:#1a0d2a;color:#a87ccc;border-color:#2a1a3a">CARRY</span>
+      <span class="tag" style="background:#1e1200;color:#d4a060;border-color:#2a1a0a">STRENGTH</span>
+      <span class="tag" style="background:#1e1a00;color:#d4c840;border-color:#2a2000">HYPERTROPHY</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#f5a623">🔥 RAMP WARM-UP</div><div class="block-note">MANDATORY — NEVER SKIP</div></div>
+    <div class="wu-row"><span class="wu-name">Cat-Cows</span><span class="wu-sets">10 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Thoracic Windmills</span><span class="wu-sets">8 each side</span></div>
+    <div class="wu-row"><span class="wu-name">Chin Tucks</span><span class="wu-sets">12 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Glute Bridges</span><span class="wu-sets">15 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Shoulder CARs (Controlled Articular Rotations)</span><span class="wu-sets">10 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Wall Slides</span><span class="wu-sets">12 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Plank Hold</span><span class="wu-sets">30 sec</span></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#4fc3f7">💪 MAIN WORKOUT</div></div>
+    <div class="tbl-head"><span>EXERCISE</span><span>SETS</span><span>REPS</span></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Chest-Supported DB Row</span><span class="row-sets">4</span><span class="row-reps">8</span></div><div class="row-note">PULL/STRENGTH — 2:1 ratio starts here.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Seated Cable Row or DB Row</span><span class="row-sets">3</span><span class="row-reps">10–12</span></div><div class="row-note">PULL/Hypertrophy.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Incline DB Press</span><span class="row-sets">3</span><span class="row-reps">10</span></div><div class="row-note">PUSH/Hypertrophy.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Cable Rear Delt Fly</span><span class="row-sets">3</span><span class="row-reps">15</span></div><div class="row-note">PULL — Posture fix. Squeeze the scapula.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">DB Lateral Raise</span><span class="row-sets">3</span><span class="row-reps">15</span></div><div class="row-note">PUSH — Shoulder hypertrophy.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">DB Bicep Curl</span><span class="row-sets">3</span><span class="row-reps">12</span></div><div class="row-note">PULL/Hypertrophy.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Tricep Extension (cable/DB)</span><span class="row-sets">3</span><span class="row-reps">12</span></div><div class="row-note">PUSH/Hypertrophy.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Suitcase Carry</span><span class="row-sets">2</span><span class="row-reps">30m ea.</span></div><div class="row-note">CARRY — Core stability + gait pattern.</div></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#66bb6a">🧘 POST-WORKOUT STRETCHES</div></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Lat stretch — 30 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Chest stretch — 30 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Trap & neck stretch — 30 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Thoracic extension over bench — 60 sec</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Child's pose — 60 sec</span></div>
+  </div>
+  <div class="planb"><div class="planb-title">⚡ PLAN B — OCPD OVERRIDE</div><div class="planb-body">No gym? Deploy the 15-min home circuit: <strong>3× Max Push-ups → 3× BW Bulgarian Split Squats → 3× Plank to failure → 3× Isometric Towel Rows.</strong><br/><span class="planb-win">This is a 100% successful Beta Deployment. No guilt. No exceptions.</span></div></div>
+</div>
+
+<!-- ═══════════════ LOWER ═══════════════ -->
+<div class="session" id="lower">
+  <div class="session-card">
+    <div class="session-top">
+      <div><div class="session-name">🟠 LOWER DAY</div><div class="session-tagline">Squat · Hinge · Lunge · Carry · Conditioning</div></div>
+      <div class="session-meta"><div class="session-duration">⏱ ~65 min</div><div class="session-equip">🏋 Full Gym</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag" style="background:#0d2a0d;color:#6ab86a;border-color:#1a3a1a">SQUAT</span>
+      <span class="tag" style="background:#0d2a0d;color:#6ab86a;border-color:#1a3a1a">HINGE</span>
+      <span class="tag" style="background:#0d2a0d;color:#6ab86a;border-color:#1a3a1a">LUNGE</span>
+      <span class="tag" style="background:#1a0d2a;color:#a87ccc;border-color:#2a1a3a">CARRY</span>
+      <span class="tag" style="background:#2a0d0d;color:#e87070;border-color:#3a1a1a">POWER</span>
+      <span class="tag" style="background:#1e1200;color:#d4a060;border-color:#2a1a0a">STRENGTH</span>
+      <span class="tag" style="background:#001e1e;color:#50c8c8;border-color:#003a3a">CONDITIONING</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#f5a623">🔥 RAMP WARM-UP</div><div class="block-note">MANDATORY — NEVER SKIP</div></div>
+    <div class="wu-row"><span class="wu-name">Cat-Cows</span><span class="wu-sets">10 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Hip Circles</span><span class="wu-sets">10 each direction</span></div>
+    <div class="wu-row"><span class="wu-name">Glute Bridges</span><span class="wu-sets">20 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Bird-Dogs</span><span class="wu-sets">12 each side</span></div>
+    <div class="wu-row"><span class="wu-name">Bodyweight Reverse Lunge</span><span class="wu-sets">10 each side</span></div>
+    <div class="wu-row"><span class="wu-name">BW Goblet Squat</span><span class="wu-sets">10 reps</span></div>
+    <div class="wu-row"><span class="wu-name">Lateral Shuffles</span><span class="wu-sets">3 × 10m — athleticism activation</span></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#4fc3f7">💪 MAIN WORKOUT</div></div>
+    <div class="tbl-head"><span>EXERCISE</span><span>SETS</span><span>REPS</span></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Med Ball Slam or KB Swing</span><span class="row-sets">3</span><span class="row-reps">5–8</span></div><div class="row-note">POWER — Explosive. Max effort every rep.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Heavy DB RDL</span><span class="row-sets">4</span><span class="row-reps">5</span></div><div class="row-note">HINGE/STRENGTH — Heaviest hinge of the week.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Heavy Goblet Squat</span><span class="row-sets">4</span><span class="row-reps">5</span></div><div class="row-note">SQUAT/STRENGTH — Drive through the floor.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Reverse Lunge with DBs</span><span class="row-sets">3</span><span class="row-reps">10 ea.</span></div><div class="row-note">LUNGE/Hypertrophy.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Hip Thrust (DB or plate on hips)</span><span class="row-sets">3</span><span class="row-reps">12</span></div><div class="row-note">GLUTES — Zero spinal load. Non-negotiable.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Leg Extension</span><span class="row-sets">3</span><span class="row-reps">12</span></div><div class="row-note">QUAD isolation/Hypertrophy.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Seated Leg Curl</span><span class="row-sets">3</span><span class="row-reps">12</span></div><div class="row-note">HAMSTRING isolation.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Heavy Farmer's Walk</span><span class="row-sets">3</span><span class="row-reps">40m</span></div><div class="row-note">CARRY — Heaviest of the week. Core brace.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Assault Bike or Incline Treadmill</span><span class="row-sets">—</span><span class="row-reps">10 min</span></div><div class="row-note">CONDITIONING — End with fire.</div></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#66bb6a">🧘 POST-WORKOUT STRETCHES</div></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Hip flexor lunge stretch — 45 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Hamstring stretch — 45 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Pigeon pose — 60 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Quad stretch — 30 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Calf stretch — 30 sec each</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Child's pose — 60 sec</span></div>
+  </div>
+  <div class="planb"><div class="planb-title">⚡ PLAN B — OCPD OVERRIDE</div><div class="planb-body">No gym? Deploy the 15-min home circuit: <strong>3× Max Push-ups → 3× BW Bulgarian Split Squats → 3× Plank to failure → 3× Isometric Towel Rows.</strong><br/><span class="planb-win">This is a 100% successful Beta Deployment. No guilt. No exceptions.</span></div></div>
+</div>
+
+<!-- ═══════════════ RECOVERY ═══════════════ -->
+<div class="session" id="recovery">
+  <div class="session-card">
+    <div class="session-top">
+      <div><div class="session-name">⚪ RECOVERY DAY</div><div class="session-tagline">Mobility · Flexibility · CNS Reset · Active Recovery</div></div>
+      <div class="session-meta"><div class="session-duration">⏱ 30–40 min</div><div class="session-equip">🏠 Home / Anywhere</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag" style="background:#1a1a1a;color:#aaa;border-color:#333">MOBILITY</span>
+      <span class="tag" style="background:#1a1a1a;color:#aaa;border-color:#333">ACTIVE RECOVERY</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#4fc3f7">🌿 RECOVERY PROTOCOL</div><div class="block-note">No gym needed</div></div>
+    <div class="tbl-head"><span>MOVEMENT</span><span>SETS</span><span>DURATION</span></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Light Walk (morning)</span><span class="row-sets">—</span><span class="row-reps">10–15m</span></div><div class="row-note">Blood flow. No metrics. Just move.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Cat-Cow Flow</span><span class="row-sets">2</span><span class="row-reps">10 reps</span></div><div class="row-note">Spine decompression.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Thoracic Windmills</span><span class="row-sets">2</span><span class="row-reps">10 each</span></div><div class="row-note">T-spine mobility.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Hip 90/90 Stretch</span><span class="row-sets">—</span><span class="row-reps">60s ea.</span></div><div class="row-note">Hip mobility — the most underdone stretch.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Pigeon Pose</span><span class="row-sets">—</span><span class="row-reps">60s ea.</span></div><div class="row-note">Glutes + hip flexors.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">World's Greatest Stretch</span><span class="row-sets">—</span><span class="row-reps">5 each</span></div><div class="row-note">Full-body mobility in one movement.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Deep Squat Hold</span><span class="row-sets">—</span><span class="row-reps">60 sec</span></div><div class="row-note">Ankle + hip mobility.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Child's Pose to Cobra Flow</span><span class="row-sets">2</span><span class="row-reps">10 flows</span></div><div class="row-note">Spine health. Breathe through it.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Neck Rolls</span><span class="row-sets">—</span><span class="row-reps">10 each</span></div><div class="row-note">Neck knot relief.</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Hot Shower (evening)</span><span class="row-sets">—</span><span class="row-reps">—</span></div><div class="row-note">CNS recovery + core temp drop for sleep.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ HOBBY ═══════════════ -->
+<div class="session" id="hobby">
+  <div class="session-card">
+    <div class="session-top">
+      <div><div class="session-name">🏀 HOBBY DAY</div><div class="session-tagline">Athleticism · Conditioning · Coordination · Joy</div></div>
+      <div class="session-meta"><div class="session-duration">⏱ 90–120 min</div><div class="session-equip">🏟 Court / Boxing Gym</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag" style="background:#2a0d1e;color:#d870a0;border-color:#3a1a2a">ATHLETICISM</span>
+      <span class="tag" style="background:#001e1e;color:#50c8c8;border-color:#003a3a">CONDITIONING</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#f5a623">🔥 WARM-UP</div></div>
+    <div class="wu-row"><span class="wu-name">Light Jog</span><span class="wu-sets">5 min</span></div>
+    <div class="wu-row"><span class="wu-name">Dynamic Leg Swings</span><span class="wu-sets">10 each direction</span></div>
+    <div class="wu-row"><span class="wu-name">Hip Circles</span><span class="wu-sets">10 each</span></div>
+    <div class="wu-row"><span class="wu-name">Arm Circles</span><span class="wu-sets">10 each</span></div>
+    <div class="wu-row"><span class="wu-name">Lateral Shuffles</span><span class="wu-sets">3 × 10m</span></div>
+    <div class="wu-row"><span class="wu-name">Jump Rope or Light Skip</span><span class="wu-sets">3 min</span></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#4fc3f7">🏆 ACTIVITY</div></div>
+    <div class="row"><div class="row-main"><span class="row-ex">Basketball / Boxing / Padel</span><span class="row-sets">—</span><span class="row-reps">60–90m</span></div><div class="row-note">Play. No metrics. No optimization. Just move.</div></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#66bb6a">🧘 COOL-DOWN STRETCHES</div></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Full body static stretch — 10 min</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Pigeon pose — 60 sec each side</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Hip flexor stretch — 45 sec each</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Hamstring stretch — 45 sec each</span></div>
+    <div class="stretch-item"><span class="stretch-dot">◆</span><span class="stretch-text">Shoulder cross-body — 30 sec each</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MATRIX ═══════════════ -->
+<div class="session" id="matrix">
+  <div class="session-card">
+    <div class="session-top">
+      <div><div class="session-name">📊 6×6 MATRIX</div><div class="session-tagline">Weekly coverage of all movement patterns & physical characteristics</div></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#f5a623">MOVEMENT PATTERNS</div></div>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <tr><th>PATTERN</th><th>🔴</th><th>🔵</th><th>🟢</th><th>🟡</th><th>🟠</th><th>⚪</th><th>🏀</th></tr>
+        <tr><td>Squat</td><td class="dash">–</td><td class="dash">–</td><td class="chk">✓</td><td class="dash">–</td><td class="chk">✓</td><td class="dash">–</td><td class="dash">–</td></tr>
+        <tr><td>Hinge</td><td class="dash">–</td><td class="dash">–</td><td class="chk">✓</td><td class="dash">–</td><td class="chk">✓</td><td class="dash">–</td><td class="dash">–</td></tr>
+        <tr><td>Lunge</td><td class="dash">–</td><td class="dash">–</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="dash">–</td><td class="dash">–</td></tr>
+        <tr><td>Push</td><td class="dash">–</td><td class="chk">✓</td><td class="dash">–</td><td class="chk">✓</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td></tr>
+        <tr><td>Pull</td><td class="chk">✓</td><td class="dash">–</td><td class="dash">–</td><td class="chk">✓</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td></tr>
+        <tr><td>Carry</td><td class="chk">✓</td><td class="dash">–</td><td class="dash">–</td><td class="chk">✓</td><td class="chk">✓</td><td class="dash">–</td><td class="dash">–</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#4fc3f7">PHYSICAL CHARACTERISTICS</div></div>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <tr><th>CHARACTERISTIC</th><th>🔴</th><th>🔵</th><th>🟢</th><th>🟡</th><th>🟠</th><th>⚪</th><th>🏀</th></tr>
+        <tr><td>Mobility</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="dash">–</td></tr>
+        <tr><td>Power</td><td class="dash">–</td><td class="dash">–</td><td class="chk">✓</td><td class="dash">–</td><td class="chk">✓</td><td class="dash">–</td><td class="dash">–</td></tr>
+        <tr><td>Strength</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="dash">–</td><td class="dash">–</td></tr>
+        <tr><td>Hypertrophy</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="dash">–</td><td class="dash">–</td></tr>
+        <tr><td>Conditioning</td><td class="dash">–</td><td class="dash">–</td><td class="chk">✓</td><td class="dash">–</td><td class="chk">✓</td><td class="dash">–</td><td class="chk">✓</td></tr>
+        <tr><td>Athleticism</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="chk">✓</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header"><div class="block-title" style="color:#ab47bc">💊 DAILY SUPPLEMENTS</div></div>
+    <div class="supp-grid">
+      <div class="supp-pill">Creatine Monohydrate — 5g daily (timing irrelevant)</div>
+      <div class="supp-pill">Omega-3 — with first fat-containing meal</div>
+      <div class="supp-pill">Wellman Multivitamin — with first fat-containing meal</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .content -->
+
+<div class="footer">ZERO TO HERO · DR. JOHN RUSIN 6×6 PROTOCOL · PHASE 1</div>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.session').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+</script>
+</body>
+</html>
