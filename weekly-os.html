@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZERO TO HERO — Weekly OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#090909;--bg2:#111;--bg3:#181818;--bg4:#222;
+  --gold:#f5a623;--blue:#4fc3f7;--green:#66bb6a;
+  --red:#ef5350;--purple:#ab47bc;--rose:#f06292;
+  --teal:#26c6da;--amber:#ffa726;--lime:#d4e157;
+  --text1:#f0f0f0;--text2:#888;--text3:#3a3a3a;
+  --border:#1e1e1e;--border2:#2a2a2a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text1);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+.hdr{background:#0d0d0d;border-bottom:1px solid var(--border2);padding:14px 16px;position:sticky;top:0;z-index:300;}
+.hdr-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.logo{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;letter-spacing:2px;line-height:1;}
+.logo span{color:var(--gold);}
+.eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;color:var(--text3);}
+.sub{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:var(--text3);letter-spacing:1.5px;}
+.hdr-right{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 9px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);}
+.badge-red{border-color:#3a1515;background:#100808;color:var(--red);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+
+.tabs-wrap{background:#0d0d0d;border-bottom:1px solid var(--border);position:sticky;top:57px;z-index:200;overflow-x:auto;}
+.tabs{max-width:980px;margin:0 auto;display:flex;padding:0 16px;}
+.tab{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:10px 14px;border:none;background:transparent;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;text-transform:uppercase;}
+.tab:hover{color:var(--text2);}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+
+.content{max-width:980px;margin:0 auto;padding:14px 16px 40px;}
+.page{display:none;animation:fadeIn .2s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── OVERVIEW ── */
+.week-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:18px;}
+.wc{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:12px;cursor:pointer;transition:all .2s;}
+.wc:hover{border-color:var(--gold);transform:translateY(-2px);}
+.wc-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);}
+.wc-day{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:1px;}
+.wc-label{font-size:11px;color:var(--text2);margin:2px 0 6px;}
+.wc-pills{display:flex;flex-wrap:wrap;gap:3px;}
+.wpill{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;padding:1px 5px;border-radius:2px;}
+
+/* ── PRAYER TABLE ── */
+.section-hdr{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;color:var(--text3);text-transform:uppercase;padding:4px 0 8px;margin-top:6px;}
+.pt-wrap{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;overflow:hidden;margin-bottom:14px;}
+.ptable{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:11px;}
+.ptable th{background:var(--bg3);color:var(--text3);padding:8px 10px;font-size:9px;letter-spacing:1.5px;border-bottom:1px solid var(--border2);text-align:center;}
+.ptable th:first-child{text-align:left;}
+.ptable td{padding:7px 10px;border-bottom:1px solid var(--border);text-align:center;color:var(--text2);}
+.ptable td:first-child{text-align:left;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;color:var(--text1);}
+.ptable tr:last-child td{border-bottom:none;}
+.ptable tr.hl td{background:#141414;}
+.fj{color:#4fc3f7;}.dh{color:#66bb6a;}.as{color:#ffa726;}.ma{color:#f06292;}.is{color:#ab47bc;}
+
+/* ── ROUTINES ── */
+.routines-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+@media(max-width:580px){.routines-grid{grid-template-columns:1fr;}}
+.rc{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:14px;}
+.rc-hdr{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:10px;}
+.ri{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.4;}
+.ri:last-child{border-bottom:none;}
+.ri-icon{flex-shrink:0;font-size:15px;margin-top:1px;}
+.ri-text b{display:block;font-size:13px;}
+.ri-note{font-size:11px;color:var(--text3);margin-top:1px;}
+
+/* ── DAY PAGE ── */
+.day-hdr{margin-bottom:12px;}
+.day-title-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+.day-name{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;letter-spacing:1px;line-height:1;}
+.day-tags{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.dtag{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:3px;text-transform:uppercase;}
+
+.sleep-card{background:var(--bg2);border:1px solid var(--border2);border-radius:7px;padding:10px 14px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;}
+.sc-item{display:flex;flex-direction:column;gap:1px;}
+.sc-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;}
+.sc-val{font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--blue);}
+.sc-note{font-size:11px;color:var(--amber);font-style:italic;align-self:center;}
+
+.prayer-strip{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.ps{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:7px 11px;display:flex;flex-direction:column;gap:1px;flex:1;min-width:80px;}
+.ps-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);}
+.ps-time{font-family:'JetBrains Mono',monospace;font-size:13px;}
+
+/* ── TIMELINE ── */
+.timeline{position:relative;padding-left:16px;}
+.timeline::before{content:'';position:absolute;left:3px;top:0;bottom:0;width:2px;background:var(--border2);}
+.blk{position:relative;margin-bottom:6px;}
+.blk::before{content:'';position:absolute;left:-21px;top:12px;width:8px;height:8px;border-radius:50%;background:var(--bg3);border:2px solid var(--border2);z-index:1;}
+.blk-inner{border:1px solid var(--border2);border-radius:7px;padding:10px 12px;position:relative;}
+.blk-time{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:3px;}
+.blk-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.5px;margin-bottom:2px;}
+.blk-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-top:2px;}
+.blk-flags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+.flag{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:2px 7px;border-radius:2px;text-transform:uppercase;}
+
+/* checkbox */
+.blk-check{position:absolute;right:10px;top:10px;width:18px;height:18px;border-radius:4px;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;transition:all .15s;flex-shrink:0;}
+.blk-check:hover{border-color:var(--gold);}
+.blk.done .blk-check{background:#1a2a0a;border-color:#3a5a1a;color:var(--green);}
+.blk.done .blk-inner{opacity:.6;}
+
+/* category themes */
+.c-sleep .blk-inner{border-left:3px solid #1a3a5a;background:#06090e;}.c-sleep .blk-title{color:#4a7aab;}.c-sleep::before{border-color:#2a5a8a;}
+.c-prayer .blk-inner{border-left:3px solid #3a2a00;background:#0e0900;}.c-prayer .blk-title{color:var(--gold);}.c-prayer::before{border-color:var(--gold);}
+.c-fajr .blk-inner{border-left:3px solid #0a2a4a;background:#040c14;}.c-fajr .blk-title{color:var(--blue);}.c-fajr::before{border-color:var(--blue);}
+.c-azkar .blk-inner{border-left:3px solid #2a1d06;background:#0c0900;}.c-azkar .blk-title{color:var(--gold);}
+.c-quran .blk-inner{border-left:3px solid #2a1800;background:#0e0800;}.c-quran .blk-title{color:var(--amber);}.c-quran::before{border-color:var(--amber);}
+.c-work .blk-inner{border-left:3px solid #0a2030;background:#050c14;}.c-work .blk-title{color:var(--blue);}.c-work::before{border-color:var(--blue);}
+.c-study .blk-inner{border-left:3px solid #1a0a2a;background:#0c0614;}.c-study .blk-title{color:var(--purple);}.c-study::before{border-color:var(--purple);}
+.c-workout .blk-inner{border-left:3px solid #0a200a;background:#050e05;}.c-workout .blk-title{color:var(--green);}.c-workout::before{border-color:var(--green);}
+.c-family .blk-inner{border-left:3px solid #2a0d18;background:#100508;}.c-family .blk-title{color:var(--rose);}.c-family::before{border-color:var(--rose);}
+.c-me1 .blk-inner{border-left:3px solid #0a1e22;background:#050d10;}.c-me1 .blk-title{color:var(--teal);}
+.c-me2 .blk-inner{border-left:3px solid #202020;background:#0d0d0d;}.c-me2 .blk-title{color:var(--text2);}
+.c-journal .blk-inner{border-left:3px solid #220a1a;background:#0e0510;}.c-journal .blk-title{color:var(--rose);}
+.c-qiyam .blk-inner{border-left:3px solid #1a1430;background:#08060e;}.c-qiyam .blk-title{color:var(--purple);}.c-qiyam::before{border-color:var(--purple);}
+.c-nap .blk-inner{border-left:3px solid #0a1a2a;background:#050a10;}.c-nap .blk-title{color:var(--teal);}
+.c-travel .blk-inner{border-left:3px solid #1e1800;background:#0a0800;}.c-travel .blk-title{color:var(--amber);}
+.c-meal .blk-inner{border-left:3px solid #1a1200;background:#0a0800;}.c-meal .blk-title{color:var(--amber);}
+.c-deadline .blk-inner{border-left:3px solid #5a1010;background:#0e0606;}.c-deadline .blk-title{color:var(--red);}.c-deadline::before{border-color:var(--red);}
+.c-delivery .blk-inner{border-left:3px solid #5a1010;background:#0e0606;animation:redglow 3s infinite;}.c-delivery .blk-title{color:var(--red);}.c-delivery::before{border-color:var(--red);}
+@keyframes redglow{0%,100%{border-left-color:#5a1010}50%{border-left-color:#9a2020}}
+.c-win .blk-inner{border-left:3px solid #1a4a0a;background:#080e04;}.c-win .blk-title{color:var(--green);}
+.c-routine .blk-inner{border-left:3px solid #2a1a00;background:#0e0900;}.c-routine .blk-title{color:var(--gold);}
+.c-hifz .blk-inner{border-left:3px solid #2a1800;background:#0c0700;}.c-hifz .blk-title{color:var(--amber);}
+
+/* flag colors */
+.f-nn{background:#150e00;color:var(--gold);border:1px solid #2a1d00;}
+.f-fast{background:#1a1000;color:var(--amber);border:1px solid #2a1800;}
+.f-dead{background:#1a0808;color:var(--red);border:1px solid #2a1010;}
+.f-beta{background:#081408;color:var(--green);border:1px solid #0a2a0a;}
+.f-crunch{background:#1a0808;color:#ff8a80;border:1px solid #3a1010;}
+.f-quiz{background:#1a0a2a;color:var(--purple);border:1px solid #2a1040;}
+.f-iftar{background:#2a1400;color:var(--amber);border:1px solid #3a1e00;}
+
+/* section sep */
+.sep{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;color:var(--text3);text-transform:uppercase;padding:8px 0 3px;margin-top:4px;}
+
+/* ── DEADLINE BANNER ── */
+.deadline-banner{background:#0e0606;border:1px solid #3a1010;border-radius:7px;padding:10px 14px;margin-bottom:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.db-icon{font-size:20px;}
+.db-text .db-title{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--red);}
+.db-text .db-note{font-size:11px;color:#888;margin-top:1px;}
+
+footer{text-align:center;padding:20px 16px;font-family:'Barlow Condensed',sans-serif;font-size:9px;color:var(--text3);letter-spacing:3px;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-inner">
+    <div>
+      <div class="eyebrow">WEEK 01 · APR 12–17 · 2026</div>
+      <div class="logo">ZERO <span>TO</span> HERO</div>
+      <div class="sub">WEEKLY OS · CAIRO, EG · ZAHRAA EL MAADI</div>
+    </div>
+    <div class="hdr-right">
+      <div class="badge">SUN → FRI · 6 DAYS</div>
+      <div class="badge-red">⚠ 3 DEADLINES</div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="sw('ov',this)">📋 OVERVIEW</button>
+    <button class="tab" onclick="sw('rt',this)">⚙ ROUTINES</button>
+    <button class="tab" onclick="sw('pr',this)">🕌 PRAYERS</button>
+    <button class="tab" onclick="sw('sun',this)"><span class="dot" style="background:#f5a623"></span>SUN 12</button>
+    <button class="tab" onclick="sw('mon',this)"><span class="dot" style="background:#ffa726"></span>MON 13</button>
+    <button class="tab" onclick="sw('tue',this)"><span class="dot" style="background:#ef5350"></span>TUE 14</button>
+    <button class="tab" onclick="sw('wed',this)"><span class="dot" style="background:#ef5350"></span>WED 15</button>
+    <button class="tab" onclick="sw('thu',this)"><span class="dot" style="background:#ffa726"></span>THU 16</button>
+    <button class="tab" onclick="sw('fri',this)"><span class="dot" style="background:#66bb6a"></span>FRI 17</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ════════════════════ OVERVIEW ════════════════════ -->
+<div class="page active" id="ov">
+  <div class="section-hdr">WEEK AT A GLANCE</div>
+  <div class="week-grid">
+    <div class="wc" onclick="sw('sun',tabAt(3))">
+      <div class="wc-date">APR 12</div>
+      <div class="wc-day" style="color:#f5a623">SUN</div>
+      <div class="wc-label">HOME DAY</div>
+      <div class="wc-pills">
+        <div class="wpill" style="background:#0a1e2a;color:#4fc3f7">TGATES KICKOFF</div>
+        <div class="wpill" style="background:#0a1a0a;color:#66bb6a">💪 GYM A</div>
+      </div>
+    </div>
+    <div class="wc" onclick="sw('mon',tabAt(4))">
+      <div class="wc-date">APR 13</div>
+      <div class="wc-day" style="color:#ffa726">MON</div>
+      <div class="wc-label">HOME · FAST DAY</div>
+      <div class="wc-pills">
+        <div class="wpill" style="background:#2a1200;color:#ffa726">🌙 FAST</div>
+        <div class="wpill" style="background:#0a1e2a;color:#4fc3f7">TGATES + GRAD</div>
+        <div class="wpill" style="background:#0a1a0a;color:#66bb6a">💪 GYM B</div>
+      </div>
+    </div>
+    <div class="wc" onclick="sw('tue',tabAt(5))">
+      <div class="wc-date">APR 14</div>
+      <div class="wc-day" style="color:#ef5350">TUE</div>
+      <div class="wc-label">UNI DAY</div>
+      <div class="wc-pills">
+        <div class="wpill" style="background:#1a0a2a;color:#ab47bc">PARALLEL + IDSS</div>
+        <div class="wpill" style="background:#1a0808;color:#ef5350">⚠ NLP CRUNCH</div>
+      </div>
+    </div>
+    <div class="wc" onclick="sw('wed',tabAt(6))">
+      <div class="wc-date">APR 15</div>
+      <div class="wc-day" style="color:#ef5350">WED</div>
+      <div class="wc-label">UNI DAY</div>
+      <div class="wc-pills">
+        <div class="wpill" style="background:#1a0808;color:#ef5350">🚨 NLP DUE 11:59PM</div>
+        <div class="wpill" style="background:#1a0a2a;color:#ab47bc">NLP LECTURE</div>
+      </div>
+    </div>
+    <div class="wc" onclick="sw('thu',tabAt(7))">
+      <div class="wc-date">APR 16</div>
+      <div class="wc-day" style="color:#ffa726">THU</div>
+      <div class="wc-label">UNI · FAST DAY</div>
+      <div class="wc-pills">
+        <div class="wpill" style="background:#2a1200;color:#ffa726">🌙 FAST</div>
+        <div class="wpill" style="background:#1a0a2a;color:#ab47bc">⚡ PC QUIZ</div>
+        <div class="wpill" style="background:#1a0808;color:#ef5350">TGATES FINAL</div>
+      </div>
+    </div>
+    <div class="wc" onclick="sw('fri',tabAt(8))">
+      <div class="wc-date">APR 17</div>
+      <div class="wc-day" style="color:#66bb6a">FRI</div>
+      <div class="wc-label">HOBBY DAY 🏀</div>
+      <div class="wc-pills">
+        <div class="wpill" style="background:#1a0808;color:#ef5350">TGATES DELIVER</div>
+        <div class="wpill" style="background:#0a1a0a;color:#66bb6a">🏀 BASKETBALL</div>
+        <div class="wpill" style="background:#150e00;color:#f5a623">WEEK PLAN</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-hdr">SLEEP SHIFT PROTOCOL · TARGET WAKE-TIMES</div>
+  <div class="pt-wrap" style="margin-bottom:14px;">
+    <table class="ptable">
+      <thead><tr>
+        <th>DAY</th><th>SLEEP BY</th><th>FAJR</th><th>BACK TO SLEEP</th><th>WAKE UP</th><th>TOTAL HRS</th>
+      </tr></thead>
+      <tbody>
+        <tr class="hl"><td>SUN 12</td><td style="color:#4fc3f7">5:00 AM*</td><td class="fj">4:03 AM</td><td style="color:#555">already sleeping</td><td style="color:#66bb6a">12:00 PM</td><td style="color:#66bb6a">~7h</td></tr>
+        <tr><td>MON 13</td><td style="color:#4fc3f7">1:00 AM</td><td class="fj">4:01 AM</td><td style="color:#555">4:18 AM</td><td style="color:#66bb6a">9:00 AM</td><td style="color:#66bb6a">~7.5h</td></tr>
+        <tr><td>TUE 14</td><td style="color:#4fc3f7">12:30 AM</td><td class="fj">4:00 AM</td><td style="color:#555">4:18 AM → 7:00 AM</td><td style="color:#ffa726">7:00 AM ⚠</td><td style="color:#ffa726">~6h</td></tr>
+        <tr><td>WED 15</td><td style="color:#4fc3f7">1:00 AM</td><td class="fj">3:59 AM</td><td style="color:#555">4:17 AM</td><td style="color:#66bb6a">9:00 AM</td><td style="color:#66bb6a">~7h</td></tr>
+        <tr><td>THU 16</td><td style="color:#4fc3f7">12:30 AM</td><td class="fj">3:57 AM</td><td style="color:#555">4:15 AM</td><td style="color:#66bb6a">9:00 AM</td><td style="color:#66bb6a">~7.5h</td></tr>
+        <tr><td>FRI 17</td><td style="color:#4fc3f7">12:30 AM</td><td class="fj">3:56 AM</td><td style="color:#555">4:14 AM</td><td style="color:#66bb6a">8:00 AM</td><td style="color:#66bb6a">~7h</td></tr>
+      </tbody>
+    </table>
+    <div style="padding:8px 12px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);">* SUN: sleeping AFTER Fajr at ~5 AM (tonight's start). Rule every night: set alarm 10 min before Fajr, pray, then sleep again.</div>
+  </div>
+
+  <div class="section-hdr">TRAINING MAP · 4 SESSIONS THIS WEEK</div>
+  <div class="pt-wrap">
+    <table class="ptable">
+      <thead><tr><th>DAY</th><th>TYPE</th><th>STATUS</th><th>NOTE</th></tr></thead>
+      <tbody>
+        <tr><td>SUN 12</td><td style="color:#66bb6a">Full Gym — Session A</td><td style="color:#66bb6a">✓ SCHEDULED</td><td style="color:#555">Push or Pull. RAMP warm-up mandatory.</td></tr>
+        <tr><td>MON 13</td><td style="color:#66bb6a">Full Gym — Session B</td><td style="color:#66bb6a">✓ SCHEDULED</td><td style="color:#ffa726">Fasted training — keep intensity moderate.</td></tr>
+        <tr><td>TUE 14</td><td style="color:#555">Movement Only</td><td style="color:#555">30+ min walking at uni</td><td style="color:#555">Counts. No guilt.</td></tr>
+        <tr><td>WED 15</td><td style="color:#4fc3f7">Plan B (optional)</td><td style="color:#4fc3f7">BETA DEPLOY IF TIME</td><td style="color:#555">15 min between work sessions. Deadline day.</td></tr>
+        <tr><td>THU 16</td><td style="color:#555">Movement Only</td><td style="color:#555">Walking at uni (heavy day)</td><td style="color:#ffa726">Full day + fast + quiz. Body rest counts.</td></tr>
+        <tr class="hl"><td>FRI 17</td><td style="color:#66bb6a">🏀 Basketball</td><td style="color:#66bb6a">✓ HOBBY DAY</td><td style="color:#66bb6a">Session 4 locked. Full fun, zero guilt.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════════════════════ ROUTINES ════════════════════ -->
+<div class="page" id="rt">
+  <div class="section-hdr">FIXED DAILY ROUTINES — NON-NEGOTIABLE BOOKENDS</div>
+  <div class="routines-grid">
+    <div class="rc">
+      <div class="rc-hdr">🌅 MORNING BOOT SEQUENCE</div>
+      <div class="ri"><div class="ri-icon">⏰</div><div class="ri-text"><b>Alarm 10 min before Fajr</b><div class="ri-note">Set it before sleeping. No exceptions. Phone stays on charger across room.</div></div></div>
+      <div class="ri"><div class="ri-icon">🚿</div><div class="ri-text"><b>Wudu</b><div class="ri-note">Before Fajr. This is the first physical act of the day.</div></div></div>
+      <div class="ri"><div class="ri-icon">🕌</div><div class="ri-text"><b>Fajr on time — NON-NEGOTIABLE</b><div class="ri-note">Tier 1. If only this happens, morning = 100% success.</div></div></div>
+      <div class="ri"><div class="ri-icon">📿</div><div class="ri-text"><b>Morning Azkar — 15–20 min</b><div class="ri-note">Immediately after Fajr. No phone. Printed azkar or memorized.</div></div></div>
+      <div class="ri"><div class="ri-icon">💧</div><div class="ri-text"><b>500ml water</b><div class="ri-note">When officially starting the day (not fasting) or after waking from second sleep.</div></div></div>
+      <div class="ri"><div class="ri-icon">🥚</div><div class="ri-text"><b>First meal within 1 hr of waking</b><div class="ri-note">Protein first. Supplements: 5g Creatine + Omega-3 + Wellman. Not on fast days.</div></div></div>
+    </div>
+    <div class="rc">
+      <div class="rc-hdr">🌙 NIGHT SHUTDOWN SEQUENCE</div>
+      <div class="ri"><div class="ri-icon">📓</div><div class="ri-text"><b>Journal — 15 min</b><div class="ri-note">Unfiltered. What happened. What was the trigger. One thing to fix tomorrow.</div></div></div>
+      <div class="ri"><div class="ri-icon">🧹</div><div class="ri-text"><b>Quick night review</b><div class="ri-note">Did I hit: Fajr? Quran? Protein target? Workout or movement? Yes/No only.</div></div></div>
+      <div class="ri"><div class="ri-icon">📿</div><div class="ri-text"><b>Night Azkar — 15–20 min</b><div class="ri-note">Scheduled after Asr per your protocol. Can also repeat a short version here.</div></div></div>
+      <div class="ri"><div class="ri-icon">🌙</div><div class="ri-text"><b>Qiyam al-Layl</b><div class="ri-note">Minimum: Shaf' (2 rakaat) + Witr (1 rakaat). Full: 8 + 2 + 1 = 11 rakaat. Both are valid.</div></div></div>
+      <div class="ri"><div class="ri-icon">📵</div><div class="ri-text"><b>Phone Swap Protocol</b><div class="ri-note">Phone goes across the room on charger. Replace with physical book or audio-only.</div></div></div>
+      <div class="ri"><div class="ri-icon">😴</div><div class="ri-text"><b>Sleep with intention</b><div class="ri-note">Bismillah. Left side. Alarm already set for next Fajr.</div></div></div>
+    </div>
+  </div>
+
+  <div class="section-hdr">DAILY DEEN CONSTANTS</div>
+  <div class="rc">
+    <div class="rc-hdr">📖 QURAN & HIFZ PROTOCOL</div>
+    <div class="ri"><div class="ri-icon">📖</div><div class="ri-text"><b>Quran Werd — 20 pages daily</b><div class="ri-note">Your call. Read with tarteel. Can be split into 2 sessions of 10 pages on heavy days. ~40–45 min total.</div></div></div>
+    <div class="ri"><div class="ri-icon">🧠</div><div class="ri-text"><b>Hifz / Revision — 15–20 min daily</b><div class="ri-note">Phase 1: Revision only. An-Nas to Ad-Duha. Rebuild the habit before adding new material.</div></div></div>
+    <div class="ri"><div class="ri-icon">📿</div><div class="ri-text"><b>Morning Azkar — after Fajr — 15–20 min</b><div class="ri-note">Non-negotiable. Before any screen time.</div></div></div>
+    <div class="ri"><div class="ri-icon">🌇</div><div class="ri-text"><b>Evening/Night Azkar — after Asr — 15–20 min</b><div class="ri-note">Your protocol. After Asr prayer, before any other task resumes.</div></div></div>
+  </div>
+</div>
+
+<!-- ════════════════════ PRAYERS ════════════════════ -->
+<div class="page" id="pr">
+  <div class="section-hdr">CAIRO PRAYER TIMES · APR 12–17 · 2026 · EGYPTIAN GENERAL AUTHORITY OF SURVEY</div>
+  <div class="pt-wrap">
+    <table class="ptable">
+      <thead>
+        <tr>
+          <th>DATE</th>
+          <th class="fj">FAJR</th>
+          <th style="color:#555">SUNRISE</th>
+          <th class="dh">DHUHR</th>
+          <th class="as">ASR</th>
+          <th class="ma">MAGHRIB</th>
+          <th class="is">ISHA</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hl"><td>SUN APR 12</td><td class="fj">04:03</td><td style="color:#333">05:32</td><td class="dh">11:57</td><td class="as">03:31</td><td class="ma">06:20</td><td class="is">07:41</td></tr>
+        <tr><td>MON APR 13 🌙</td><td class="fj">04:01</td><td style="color:#333">05:31</td><td class="dh">11:56</td><td class="as">03:31</td><td class="ma">06:21</td><td class="is">07:41</td></tr>
+        <tr><td>TUE APR 14</td><td class="fj">04:00</td><td style="color:#333">05:30</td><td class="dh">11:56</td><td class="as">03:31</td><td class="ma">06:22</td><td class="is">07:42</td></tr>
+        <tr><td>WED APR 15</td><td class="fj">03:59</td><td style="color:#333">05:29</td><td class="dh">11:56</td><td class="as">03:31</td><td class="ma">06:22</td><td class="is">07:43</td></tr>
+        <tr><td>THU APR 16 🌙</td><td class="fj">03:57</td><td style="color:#333">05:28</td><td class="dh">11:56</td><td class="as">03:31</td><td class="ma">06:23</td><td class="is">07:44</td></tr>
+        <tr><td>FRI APR 17</td><td class="fj">03:56</td><td style="color:#333">05:27</td><td class="dh">11:55</td><td class="as">03:31</td><td class="ma">06:23</td><td class="is">07:45</td></tr>
+      </tbody>
+    </table>
+    <div style="padding:8px 12px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);">🌙 = Sunnah fast day. Iftar at Maghrib. Break with 3 Medjool dates.</div>
+  </div>
+  <div class="section-hdr">FAJR TIMING RULE — NON-NEGOTIABLE</div>
+  <div class="rc">
+    <div style="font-size:13px;color:var(--text2);line-height:1.7;padding:4px 0;">
+      Every night before sleeping → set alarm <strong style="color:var(--gold)">10 minutes before next day's Fajr</strong>. Wake up. Make Wudu. Pray Fajr on time. Then go back to sleep if needed. <strong style="color:var(--gold)">This is the only non-negotiable rule of the entire system.</strong> Everything else is flexible. Fajr is not. Whatever time you slept — 1 AM, 3 AM, 5 AM — Fajr runs on its own clock.
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ SUNDAY ════════════════════ -->
+<div class="page" id="sun">
+  <div class="day-hdr">
+    <div class="day-title-row">
+      <div class="day-name" style="color:#f5a623">SUNDAY <span style="color:var(--text2);font-size:22px">APR 12</span></div>
+      <div class="day-tags">
+        <div class="dtag" style="background:#0a1e2a;color:#4fc3f7;border:1px solid #0d2a3a">HOME DAY</div>
+        <div class="dtag" style="background:#0a1a0a;color:#66bb6a;border:1px solid #0d2a0d">💪 GYM DAY</div>
+        <div class="dtag" style="background:#150e00;color:#f5a623;border:1px solid #2a1a00">TGATES KICKOFF</div>
+      </div>
+    </div>
+    <div class="sleep-card">
+      <div class="sc-item"><div class="sc-lbl">SLEEP AFTER</div><div class="sc-val">~5:00 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">WAKE UP</div><div class="sc-val">12:00 PM</div></div>
+      <div class="sc-item"><div class="sc-lbl">TOTAL SLEEP</div><div class="sc-val" style="color:#66bb6a">~7h</div></div>
+      <div class="sc-note">Tonight you ARE awake. Pray Fajr at 4:03 AM then sleep. WIN.</div>
+    </div>
+    <div class="prayer-strip">
+      <div class="ps"><div class="ps-lbl fj">FAJR</div><div class="ps-time fj">04:03</div></div>
+      <div class="ps"><div class="ps-lbl dh">DHUHR</div><div class="ps-time dh">11:57</div></div>
+      <div class="ps"><div class="ps-lbl as">ASR</div><div class="ps-time as">03:31</div></div>
+      <div class="ps"><div class="ps-lbl ma">MAGHRIB</div><div class="ps-time ma">06:20</div></div>
+      <div class="ps"><div class="ps-lbl is">ISHA</div><div class="ps-time is">07:41</div></div>
+    </div>
+  </div>
+
+  <div class="sep">STILL TONIGHT — APR 12 EARLY AM</div>
+  <div class="timeline">
+    <div class="blk c-fajr"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:53 AM — alarm</div>
+      <div class="blk-title">🕌 FAJR — 4:03 AM</div>
+      <div class="blk-desc">You're already awake. Set alarm now for 3:53 AM as backup. Wudu → pray Fajr on time → Morning Azkar (15–20 min).</div>
+      <div class="blk-flags"><span class="flag f-nn">NON-NEGOTIABLE</span></div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">~5:00 AM</div>
+      <div class="blk-title">😴 SLEEP — Target 7 hours</div>
+      <div class="blk-desc">After Fajr + Azkar. Phone across the room. Wake target: 12:00 PM. Next alarm: 3:51 AM Monday (Fajr).</div>
+    </div></div>
+  </div>
+
+  <div class="sep">SUNDAY DAY — STARTING 12:00 PM</div>
+  <div class="timeline">
+    <div class="blk c-routine"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:00 – 12:30 PM</div>
+      <div class="blk-title">🌅 MORNING ROUTINE</div>
+      <div class="blk-desc">Freshen up. 500ml water. First meal within 30 min of waking: eggs + balady bread or PB toast. Supplements: Creatine + Omega-3 + Wellman.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:30 PM (window: 11:57 AM – 3:31 PM)</div>
+      <div class="blk-title">🕌 DHUHR</div>
+      <div class="blk-desc">Pray shortly after waking. Window is still open.</div>
+    </div></div>
+    <div class="blk c-quran"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:45 – 1:30 PM</div>
+      <div class="blk-title">📖 QURAN WERD — 20 pages</div>
+      <div class="blk-desc">Full session. No phone. Tarteel. No rush. ~40–45 min.</div>
+    </div></div>
+    <div class="blk c-hifz"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">1:30 – 1:50 PM</div>
+      <div class="blk-title">🧠 HIFZ / REVISION</div>
+      <div class="blk-desc">An-Nas to Ad-Duha. Recite from memory. 15–20 min. Phase 1: no new material.</div>
+    </div></div>
+    <div class="blk c-work"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">1:50 – 3:20 PM</div>
+      <div class="blk-title">💼 TGATES — WORK BLOCK 1</div>
+      <div class="blk-desc">Kickoff session. Define agent architecture. Map existing ERP endpoints. Set up N8N flow skeleton. Groq integration. This is your technical foundation — get the structure right before building fast.</div>
+      <div class="blk-flags"><span class="flag f-dead">PRODUCTION SPRINT</span></div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:31 PM</div>
+      <div class="blk-title">🕌 ASR + 📿 NIGHT AZKAR</div>
+      <div class="blk-desc">Stop work. Pray Asr on time. Evening/Night Azkar immediately after (15–20 min). Then meal before workout.</div>
+    </div></div>
+    <div class="blk c-meal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:55 – 4:15 PM</div>
+      <div class="blk-title">🥗 PRE-WORKOUT MEAL (Slot 2)</div>
+      <div class="blk-desc">Fast carbs + light protein. 30–90 min before training. No oats. Options: banana + Greek yogurt, or rice cakes + PB, or bread + boiled egg.</div>
+    </div></div>
+    <div class="blk c-workout"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">4:15 – 6:00 PM</div>
+      <div class="blk-title">💪 WORKOUT — SESSION A</div>
+      <div class="blk-desc">30 min prep/change + travel → RAMP warm-up (mandatory) → 45–55 min main block → 30 min back + shower. Follow workout plan at mo-30.github.io/workout-plan. No spinal loading.</div>
+      <div class="blk-flags"><span class="flag f-beta">PLAN B IF BLOCKED</span></div>
+    </div></div>
+    <div class="blk c-family"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:00 – 6:20 PM</div>
+      <div class="blk-title">👨‍👩‍👦 FAMILY TIME</div>
+      <div class="blk-desc">Present. Phone down. Talk. Eat together if timing aligns.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:20 PM</div>
+      <div class="blk-title">🕌 MAGHRIB</div>
+    </div></div>
+    <div class="blk c-meal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:20 – 7:00 PM</div>
+      <div class="blk-title">🍗 POST-WORKOUT MAIN MEAL (Slot 3)</div>
+      <div class="blk-desc">Largest meal. Within 60 min of finishing training. Chicken + rice + veg or equivalent. Hit the protein.</div>
+    </div></div>
+    <div class="blk c-me1"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">7:00 – 7:41 PM</div>
+      <div class="blk-title">🧠 ME TIME — SECTION 1</div>
+      <div class="blk-desc">Self-development block. AI learning, business content, podcast, or course. 40 min. Active input, not passive scrolling.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">7:41 PM</div>
+      <div class="blk-title">🕌 ISHA</div>
+    </div></div>
+    <div class="blk c-work"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">8:00 – 10:30 PM</div>
+      <div class="blk-title">💼 TGATES — WORK BLOCK 2</div>
+      <div class="blk-desc">Main build session. 2.5 hours deep work. Agent CRUD operations + database access layer. Take a 5 min break every hour. No context switching.</div>
+      <div class="blk-flags"><span class="flag f-dead">DAY 1 OF 5-DAY SPRINT</span></div>
+    </div></div>
+    <div class="blk c-me2"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:30 – 11:00 PM</div>
+      <div class="blk-title">🎮 ME TIME — SECTION 2</div>
+      <div class="blk-desc">Relax. Scroll, game, whatever. Hard cap at 30 min. Set a timer before starting.</div>
+    </div></div>
+    <div class="blk c-study"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:00 – 11:30 PM</div>
+      <div class="blk-title">🎓 GRADUATION PROJECT — LIGHT REVIEW</div>
+      <div class="blk-desc">30 min. Review current state. Write 3 tasks to do next session. No deep work tonight — just keep the thread alive.</div>
+    </div></div>
+    <div class="blk c-meal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:30 PM</div>
+      <div class="blk-title">🥣 LAST MEAL (Slot 4)</div>
+      <div class="blk-desc">High protein, lower carb. 2–3 hrs before sleep. Greek yogurt + PB, cottage cheese, or chicken. Track macros.</div>
+    </div></div>
+  </div>
+
+  <div class="sep">SUNDAY NIGHT SHUTDOWN</div>
+  <div class="timeline">
+    <div class="blk c-journal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:45 PM</div>
+      <div class="blk-title">📓 JOURNAL — 15 min</div>
+      <div class="blk-desc">Day 1 of the new system. What happened today. What the trigger was for any lapse. One action to execute better tomorrow. Be honest.</div>
+    </div></div>
+    <div class="blk c-qiyam"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:10 AM</div>
+      <div class="blk-title">🌙 QIYAM AL-LAYL</div>
+      <div class="blk-desc">Minimum: Shaf' (2 rakaat) + Witr (1 rakaat). Full if energy allows: 8 + 2 + 1 = 11 rakaat. Both are complete victories.</div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">1:00 AM — TARGET</div>
+      <div class="blk-title">😴 SLEEP</div>
+      <div class="blk-desc">Phone swap. Book or audio-only. Alarm set for 3:51 AM (Fajr Monday 4:01 AM). Sleep on left side. Bismillah.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ════════════════════ MONDAY ════════════════════ -->
+<div class="page" id="mon">
+  <div class="day-hdr">
+    <div class="day-title-row">
+      <div class="day-name" style="color:#ffa726">MONDAY <span style="color:var(--text2);font-size:22px">APR 13</span></div>
+      <div class="day-tags">
+        <div class="dtag" style="background:#2a1200;color:#ffa726;border:1px solid #3a1800">🌙 FAST DAY</div>
+        <div class="dtag" style="background:#0a1e2a;color:#4fc3f7;border:1px solid #0d2a3a">HOME DAY</div>
+        <div class="dtag" style="background:#0a1a0a;color:#66bb6a;border:1px solid #0d2a0d">💪 GYM DAY</div>
+      </div>
+    </div>
+    <div class="sleep-card">
+      <div class="sc-item"><div class="sc-lbl">SLEEP BY</div><div class="sc-val">1:00 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">FAJR ALARM</div><div class="sc-val fj">3:51 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">BACK TO SLEEP</div><div class="sc-val">4:20 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">WAKE UP</div><div class="sc-val">9:00 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">TOTAL SLEEP</div><div class="sc-val" style="color:#66bb6a">~7.5h</div></div>
+      <div class="sc-note">Fast day. No food until Maghrib 6:21 PM. Break with 3 Medjool dates.</div>
+    </div>
+    <div class="prayer-strip">
+      <div class="ps"><div class="ps-lbl fj">FAJR</div><div class="ps-time fj">04:01</div></div>
+      <div class="ps"><div class="ps-lbl dh">DHUHR</div><div class="ps-time dh">11:56</div></div>
+      <div class="ps"><div class="ps-lbl as">ASR</div><div class="ps-time as">03:31</div></div>
+      <div class="ps"><div class="ps-lbl ma">MAGHRIB / IFTAR</div><div class="ps-time ma">06:21</div></div>
+      <div class="ps"><div class="ps-lbl is">ISHA</div><div class="ps-time is">07:41</div></div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="blk c-fajr"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:51 AM alarm → 4:01 AM</div>
+      <div class="blk-title">🕌 FAJR + 📿 MORNING AZKAR</div>
+      <div class="blk-desc">Pray Fajr. Morning Azkar (15–20 min). Back to sleep by 4:20 AM. No food yet — fast starts at Fajr.</div>
+      <div class="blk-flags"><span class="flag f-nn">NON-NEGOTIABLE</span><span class="flag f-fast">FAST STARTS</span></div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-time">4:20 AM – 9:00 AM</div>
+      <div class="blk-title">😴 SECOND SLEEP</div>
+      <div class="blk-desc">~4h40m. Alarm at 9:00 AM. Do not snooze.</div>
+    </div></div>
+    <div class="blk c-routine"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">9:00 – 9:20 AM</div>
+      <div class="blk-title">🌅 MORNING ROUTINE (FAST DAY)</div>
+      <div class="blk-desc">Freshen up. Water only (fasting). No food. Brush teeth. Intention for fast.</div>
+    </div></div>
+    <div class="blk c-quran"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">9:20 – 10:10 AM</div>
+      <div class="blk-title">📖 QURAN WERD — 20 pages</div>
+      <div class="blk-desc">Morning is the best time for Quran. No distractions. Tarteel. ~45 min.</div>
+    </div></div>
+    <div class="blk c-hifz"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:10 – 10:30 AM</div>
+      <div class="blk-title">🧠 HIFZ / REVISION</div>
+      <div class="blk-desc">An-Nas to Ad-Duha. 15–20 min.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:56 AM</div>
+      <div class="blk-title">🕌 DHUHR</div>
+      <div class="blk-desc">Pray on time. Short break from work.</div>
+    </div></div>
+    <div class="blk c-work"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:30 AM – 1:30 PM</div>
+      <div class="blk-title">💼 TGATES — WORK BLOCK 1</div>
+      <div class="blk-desc">Deep build session. 3 hours. Implement CRUD agent operations. Connect to ERP endpoints. Test basic commands. Fasted = sharp focus window — use it.</div>
+      <div class="blk-flags"><span class="flag f-dead">DAY 2 OF 5-DAY SPRINT</span></div>
+    </div></div>
+    <div class="blk c-study"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">1:30 – 2:30 PM</div>
+      <div class="blk-title">🎓 GRADUATION PROJECT</div>
+      <div class="blk-desc">1 hour of meaningful work. Review current progress. Execute the 3 tasks you identified Sunday night. Sync with team if needed.</div>
+    </div></div>
+    <div class="blk c-workout"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">2:30 – 4:15 PM</div>
+      <div class="blk-title">💪 WORKOUT — SESSION B (FASTED)</div>
+      <div class="blk-desc">30 min prep + 45 min session + 30 min back/shower. Fasted training = moderate intensity. RAMP warm-up mandatory. No spinal loading. Plan B always valid.</div>
+      <div class="blk-flags"><span class="flag f-fast">FASTED SESSION</span><span class="flag f-beta">PLAN B OK</span></div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:31 PM — during or right after workout</div>
+      <div class="blk-title">🕌 ASR + 📿 NIGHT AZKAR</div>
+      <div class="blk-desc">If at gym during Asr, pray there. Azkar after (15–20 min). Back to post-workout routine.</div>
+    </div></div>
+    <div class="blk c-work"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">4:15 – 6:00 PM</div>
+      <div class="blk-title">💼 TGATES — WORK BLOCK 2</div>
+      <div class="blk-desc">Report generation module + database query layer. 1.5 hours. Also check in with team on progress.</div>
+    </div></div>
+    <div class="blk c-family"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:00 – 6:21 PM</div>
+      <div class="blk-title">👨‍👩‍👦 FAMILY + IFTAR PREP</div>
+      <div class="blk-desc">Sit with family. Prepare Iftar table. 3 Medjool dates ready at 6:21 PM.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:21 PM — IFTAR</div>
+      <div class="blk-title">🕌 MAGHRIB = IFTAR 🌙</div>
+      <div class="blk-desc">Break fast with 3 Medjool dates. Pray Maghrib. Then eat proper first meal.</div>
+      <div class="blk-flags"><span class="flag f-iftar">IFTAR 6:21 PM</span></div>
+    </div></div>
+    <div class="blk c-meal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:30 – 7:15 PM</div>
+      <div class="blk-title">🍗 IFTAR MAIN MEAL (Slot 3 — post-workout)</div>
+      <div class="blk-desc">Largest meal. First real food of the day. Hit protein hard. Chicken or beef + rice + veg. This is your post-workout recovery meal.</div>
+    </div></div>
+    <div class="blk c-me1"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">7:15 – 7:41 PM</div>
+      <div class="blk-title">🧠 ME TIME — SECTION 1</div>
+      <div class="blk-desc">Podcast, AI video, business content. 25 min. Active learning.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">7:41 PM</div>
+      <div class="blk-title">🕌 ISHA</div>
+    </div></div>
+    <div class="blk c-work"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">8:00 – 10:30 PM</div>
+      <div class="blk-title">💼 TGATES + 🎓 GRAD PROJECT</div>
+      <div class="blk-desc">Split: 1.5h TGates (language understanding layer, native Arabic input) + 1h Grad Project. Good energy post-Iftar. Use it.</div>
+    </div></div>
+    <div class="blk c-meal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:30 – 11:00 PM</div>
+      <div class="blk-title">🥣 LAST MEAL (Slot 4)</div>
+      <div class="blk-desc">High protein, lower carb. 2–3 hrs before sleep. Greek yogurt + PB or cottage cheese.</div>
+    </div></div>
+    <div class="blk c-me2"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:00 – 11:30 PM</div>
+      <div class="blk-title">🎮 ME TIME — SECTION 2</div>
+      <div class="blk-desc">30 min cap. Timer on before starting. No exceptions on the cap — Tuesday requires waking at 7 AM.</div>
+    </div></div>
+    <div class="blk c-journal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:30 PM</div>
+      <div class="blk-title">📓 JOURNAL + NIGHT ROUTINE</div>
+      <div class="blk-desc">15 min. Note fast day experience. Log macros. One reflection.</div>
+    </div></div>
+    <div class="blk c-qiyam"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:50 PM</div>
+      <div class="blk-title">🌙 QIYAM AL-LAYL</div>
+      <div class="blk-desc">Minimum 3 rakaat. Allah accepts the fast-day Qiyam especially. Then phone swap. Book/audio only.</div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:30 AM — TARGET</div>
+      <div class="blk-title">😴 SLEEP — ALARM: 3:50 AM (TUE FAJR)</div>
+      <div class="blk-desc">⚠ CRITICAL: Tuesday you have an 8:30 AM class at Nile University. After Fajr you go back to sleep until 7:00 AM. Non-negotiable wake-up.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ════════════════════ TUESDAY ════════════════════ -->
+<div class="page" id="tue">
+  <div class="day-hdr">
+    <div class="day-title-row">
+      <div class="day-name" style="color:#ef5350">TUESDAY <span style="color:var(--text2);font-size:22px">APR 14</span></div>
+      <div class="day-tags">
+        <div class="dtag" style="background:#1a0a2a;color:#ab47bc;border:1px solid #2a1040">UNI DAY</div>
+        <div class="dtag" style="background:#1a0808;color:#ef5350;border:1px solid #2a1010">⚠ NLP CRUNCH</div>
+        <div class="dtag" style="background:#0a0a0a;color:#555;border:1px solid #1a1a1a">MOVEMENT ONLY</div>
+      </div>
+    </div>
+    <div class="sleep-card">
+      <div class="sc-item"><div class="sc-lbl">SLEEP BY</div><div class="sc-val">12:30 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">FAJR ALARM</div><div class="sc-val fj">3:50 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">BACK TO SLEEP</div><div class="sc-val">4:18 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">WAKE UP</div><div class="sc-val" style="color:var(--red)">7:00 AM ⚠</div></div>
+      <div class="sc-item"><div class="sc-lbl">TOTAL SLEEP</div><div class="sc-val" style="color:#ffa726">~6h</div></div>
+      <div class="sc-note">Power nap at 5 PM (20 min max). Sets alarm before closing eyes.</div>
+    </div>
+    <div class="prayer-strip">
+      <div class="ps"><div class="ps-lbl fj">FAJR</div><div class="ps-time fj">04:00</div></div>
+      <div class="ps"><div class="ps-lbl dh">DHUHR</div><div class="ps-time dh">11:56</div></div>
+      <div class="ps"><div class="ps-lbl as">ASR</div><div class="ps-time as">03:31</div></div>
+      <div class="ps"><div class="ps-lbl ma">MAGHRIB</div><div class="ps-time ma">06:22</div></div>
+      <div class="ps"><div class="ps-lbl is">ISHA</div><div class="ps-time is">07:42</div></div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="blk c-fajr"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:50 AM alarm → 4:00 AM</div>
+      <div class="blk-title">🕌 FAJR + 📿 MORNING AZKAR</div>
+      <div class="blk-desc">Pray on time. Azkar 15 min. Back to sleep 4:18 AM. Set second alarm: 7:00 AM — no snooze.</div>
+      <div class="blk-flags"><span class="flag f-nn">NON-NEGOTIABLE</span></div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-time">4:18 AM – 7:00 AM</div>
+      <div class="blk-title">😴 SECOND SLEEP — 2h42m</div>
+      <div class="blk-desc">Hard alarm at 7:00 AM. Leave home at 7:40 AM for 8:30 AM class.</div>
+    </div></div>
+    <div class="blk c-routine"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">7:00 – 7:40 AM</div>
+      <div class="blk-title">🌅 MORNING ROUTINE + LEAVE HOME</div>
+      <div class="blk-desc">Fast prep: 10 min freshen. Quick breakfast: bread + PB or eggs (pre-workout fuel). Coffee ok. Pack laptop. Supplements. Out the door by 7:40 AM.</div>
+    </div></div>
+    <div class="blk c-travel"><div class="blk-inner">
+      <div class="blk-time">7:40 – 8:20 AM</div>
+      <div class="blk-title">🚗 DRIVE TO NILE UNIVERSITY</div>
+      <div class="blk-desc">Zahraa El Maadi → El Sheikh Zayed. ~40 min. No traffic in the morning. Listen to Quran or podcast in car.</div>
+    </div></div>
+    <div class="blk c-study"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">8:30 – 10:30 AM</div>
+      <div class="blk-title">🎓 PARALLEL COMPUTING — LECTURE</div>
+      <div class="blk-desc">Stay awake. Take focused notes. This content will be on the QUIZ Thursday. Note anything practical (lab-related).</div>
+      <div class="blk-flags"><span class="flag f-quiz">QUIZ CONTENT THU</span></div>
+    </div></div>
+    <div class="blk c-quran"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:30 – 11:05 AM</div>
+      <div class="blk-title">📖 QURAN WERD — 10 pages (Part 1)</div>
+      <div class="blk-desc">Between lectures. Phone Mushaf or physical. 30–35 min. Quiet corner at uni.</div>
+    </div></div>
+    <div class="blk c-work"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:05 – 11:56 AM</div>
+      <div class="blk-title">💼 TGATES — WORK AT UNI</div>
+      <div class="blk-desc">50 min. Laptop out. Continue build from yesterday. Push code or test endpoint connections.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:56 AM</div>
+      <div class="blk-title">🕌 DHUHR — at uni masjid or prayer room</div>
+    </div></div>
+    <div class="blk c-meal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:00 – 12:30 PM</div>
+      <div class="blk-title">🍗 LUNCH (Slot 2 — on the go)</div>
+      <div class="blk-desc">Grilled chicken sandwich (remove mayo-based sauces). Or boiled eggs + balady bread. Hit protein. No junk.</div>
+    </div></div>
+    <div class="blk c-study"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:30 – 2:30 PM</div>
+      <div class="blk-title">🎓 IDSS — LECTURE</div>
+      <div class="blk-desc">Attend. Take notes. Stay present.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:31 PM — at uni</div>
+      <div class="blk-title">🕌 ASR + 📿 NIGHT AZKAR</div>
+      <div class="blk-desc">Pray at uni. Azkar after (15 min). Then resume work.</div>
+    </div></div>
+    <div class="blk c-study"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">2:30 – 4:00 PM</div>
+      <div class="blk-title">🎓 NLP DELIVERABLE + PC QUIZ PREP</div>
+      <div class="blk-desc">Stay at uni. 45 min NLP final project work + 45 min PC quiz prep (review practical lab content). This is free time — use it. You won't be productive when tired at home.</div>
+      <div class="blk-flags"><span class="flag f-dead">DUE WED 11:59 PM</span><span class="flag f-quiz">QUIZ THU</span></div>
+    </div></div>
+    <div class="blk c-quran"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:50 – 4:20 PM</div>
+      <div class="blk-title">📖 QURAN WERD — 10 pages (Part 2)</div>
+      <div class="blk-desc">Complete today's werd. 30 min at uni or in car before leaving.</div>
+    </div></div>
+    <div class="blk c-travel"><div class="blk-inner">
+      <div class="blk-time">4:30 – 5:15 PM</div>
+      <div class="blk-title">🚗 DRIVE HOME</div>
+      <div class="blk-desc">~45 min with afternoon traffic. Quran audio or podcast in car. Decompress mentally. Don't plan in your head — just drive.</div>
+    </div></div>
+    <div class="blk c-nap"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">5:15 – 5:45 PM</div>
+      <div class="blk-title">💤 POWER NAP — 20–30 min MAX</div>
+      <div class="blk-desc">Set alarm before closing eyes. This nap is prescribed. 20–30 min only. Any longer will wreck tonight's sleep. Restores focus for the evening work sprint.</div>
+    </div></div>
+    <div class="blk c-work"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">5:45 – 7:42 PM</div>
+      <div class="blk-title">💼 TGATES — WORK BLOCK</div>
+      <div class="blk-desc">1.5+ hours. Deep work. Language understanding (Arabic intent classification). UI/display layer for client.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:22 PM</div>
+      <div class="blk-title">🕌 MAGHRIB</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">7:42 PM</div>
+      <div class="blk-title">🕌 ISHA</div>
+    </div></div>
+    <div class="blk c-study"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">8:00 – 10:00 PM</div>
+      <div class="blk-title">🎓 NLP DELIVERABLE — CRUNCH WORK</div>
+      <div class="blk-desc">2 hours of focused work. Tomorrow is the due date. Identify the critical path — what MUST be done vs nice to have. Do critical path only.</div>
+      <div class="blk-flags"><span class="flag f-crunch">DUE TOMORROW 11:59 PM</span></div>
+    </div></div>
+    <div class="blk c-family"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:00 – 10:20 PM</div>
+      <div class="blk-title">👨‍👩‍👦 FAMILY TIME</div>
+    </div></div>
+    <div class="blk c-hifz"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:20 – 10:40 PM</div>
+      <div class="blk-title">🧠 HIFZ / REVISION</div>
+      <div class="blk-desc">15–20 min. An-Nas to Ad-Duha.</div>
+    </div></div>
+    <div class="blk c-journal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:40 PM</div>
+      <div class="blk-title">📓 JOURNAL + NIGHT ROUTINE</div>
+      <div class="blk-desc">Short. First 7 AM wake-up in months. Log it. That's data.</div>
+    </div></div>
+    <div class="blk c-qiyam"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:00 PM</div>
+      <div class="blk-title">🌙 QIYAM AL-LAYL</div>
+      <div class="blk-desc">Minimum 3 rakaat. Then phone swap.</div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:30 AM — TARGET</div>
+      <div class="blk-title">😴 SLEEP — ALARM: 3:49 AM (WED FAJR)</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ════════════════════ WEDNESDAY ════════════════════ -->
+<div class="page" id="wed">
+  <div class="day-hdr">
+    <div class="day-title-row">
+      <div class="day-name" style="color:#ef5350">WEDNESDAY <span style="color:var(--text2);font-size:22px">APR 15</span></div>
+      <div class="day-tags">
+        <div class="dtag" style="background:#1a0808;color:#ef5350;border:1px solid #3a1010">🚨 NLP DUE 11:59 PM</div>
+        <div class="dtag" style="background:#1a0a2a;color:#ab47bc;border:1px solid #2a1040">UNI 2:30 PM</div>
+      </div>
+    </div>
+    <div class="deadline-banner">
+      <div class="db-icon">🚨</div>
+      <div class="db-text">
+        <div class="db-title">NLP APPLICATIONS FINAL PROJECT — DUE 11:59 PM TONIGHT</div>
+        <div class="db-note">Submit before leaving for uni if possible. Otherwise final push after lecture. Do not miss this.</div>
+      </div>
+    </div>
+    <div class="sleep-card">
+      <div class="sc-item"><div class="sc-lbl">SLEEP BY</div><div class="sc-val">1:00 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">FAJR ALARM</div><div class="sc-val fj">3:49 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">BACK TO SLEEP</div><div class="sc-val">4:17 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">WAKE UP</div><div class="sc-val" style="color:#66bb6a">9:00 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">TOTAL SLEEP</div><div class="sc-val" style="color:#66bb6a">~7h</div></div>
+    </div>
+    <div class="prayer-strip">
+      <div class="ps"><div class="ps-lbl fj">FAJR</div><div class="ps-time fj">03:59</div></div>
+      <div class="ps"><div class="ps-lbl dh">DHUHR</div><div class="ps-time dh">11:56</div></div>
+      <div class="ps"><div class="ps-lbl as">ASR</div><div class="ps-time as">03:31</div></div>
+      <div class="ps"><div class="ps-lbl ma">MAGHRIB</div><div class="ps-time ma">06:22</div></div>
+      <div class="ps"><div class="ps-lbl is">ISHA</div><div class="ps-time is">07:43</div></div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="blk c-fajr"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:49 AM alarm → 3:59 AM</div>
+      <div class="blk-title">🕌 FAJR + 📿 MORNING AZKAR</div>
+      <div class="blk-flags"><span class="flag f-nn">NON-NEGOTIABLE</span></div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-time">4:17 AM – 9:00 AM</div>
+      <div class="blk-title">😴 SECOND SLEEP</div>
+    </div></div>
+    <div class="blk c-routine"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">9:00 – 9:30 AM</div>
+      <div class="blk-title">🌅 MORNING ROUTINE + FIRST MEAL</div>
+      <div class="blk-desc">500ml water. First meal + supplements. Fuel for deadline day.</div>
+    </div></div>
+    <div class="blk c-quran"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">9:30 – 10:15 AM</div>
+      <div class="blk-title">📖 QURAN WERD — 20 pages</div>
+      <div class="blk-desc">Do this FIRST before any work. This is the spiritual anchor. Then you work with barakah.</div>
+    </div></div>
+    <div class="blk c-hifz"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:15 – 10:30 AM</div>
+      <div class="blk-title">🧠 HIFZ / REVISION</div>
+    </div></div>
+    <div class="blk c-deadline"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:30 AM – 11:56 AM</div>
+      <div class="blk-title">🚨 NLP DELIVERABLE — MORNING CRUNCH</div>
+      <div class="blk-desc">1.5 hours. Execute the critical path items identified Tuesday. Get to 80% completion before Dhuhr.</div>
+      <div class="blk-flags"><span class="flag f-crunch">DUE TONIGHT</span></div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:56 AM</div>
+      <div class="blk-title">🕌 DHUHR</div>
+    </div></div>
+    <div class="blk c-deadline"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:00 – 1:30 PM</div>
+      <div class="blk-title">🚨 NLP DELIVERABLE — FINAL BEFORE UNI</div>
+      <div class="blk-desc">1.5 more hours. Get to a submittable state. If possible, submit before leaving for uni at 1:30 PM. That removes the deadline pressure entirely.</div>
+      <div class="blk-flags"><span class="flag f-crunch">SUBMIT IF READY</span></div>
+    </div></div>
+    <div class="blk c-meal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">1:30 PM</div>
+      <div class="blk-title">🥗 MEAL + PREP FOR UNI</div>
+      <div class="blk-desc">Quick meal. Pack laptop. Leave by 1:40 PM for 2:30 PM NLP lecture.</div>
+    </div></div>
+    <div class="blk c-travel"><div class="blk-inner">
+      <div class="blk-time">1:40 – 2:20 PM</div>
+      <div class="blk-title">🚗 DRIVE TO UNI</div>
+    </div></div>
+    <div class="blk c-study"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">2:30 – 4:30 PM</div>
+      <div class="blk-title">🎓 NLP APPLICATIONS — LECTURE</div>
+      <div class="blk-desc">Attend. Take notes. This is the course your deliverable is for.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:31 PM — during or after lecture</div>
+      <div class="blk-title">🕌 ASR + 📿 NIGHT AZKAR</div>
+    </div></div>
+    <div class="blk c-deadline"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">4:30 – 5:15 PM</div>
+      <div class="blk-title">🚨 NLP — STAY AT UNI OR DRIVE HOME</div>
+      <div class="blk-desc">If not yet submitted: stay at uni 45 min and finish. If already submitted: drive home immediately. Recommend: home by 5:30 PM latest to avoid traffic rush.</div>
+    </div></div>
+    <div class="blk c-travel"><div class="blk-inner">
+      <div class="blk-time">5:15 – 6:00 PM</div>
+      <div class="blk-title">🚗 DRIVE HOME</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:22 PM</div>
+      <div class="blk-title">🕌 MAGHRIB</div>
+    </div></div>
+    <div class="blk c-work"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:30 – 7:43 PM</div>
+      <div class="blk-title">💼 TGATES — WORK BLOCK</div>
+      <div class="blk-desc">1 hour TGates. Keep the sprint moving. Tomorrow is the last full day before delivery.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">7:43 PM</div>
+      <div class="blk-title">🕌 ISHA</div>
+    </div></div>
+    <div class="blk c-deadline"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">8:00 – 11:30 PM</div>
+      <div class="blk-title">🚨 NLP DELIVERABLE — FINAL SUBMISSION PUSH</div>
+      <div class="blk-desc">If not yet submitted: this is the last window. 3.5 hours. Do NOT start anything else. Submit before 11:30 PM to leave buffer.</div>
+      <div class="blk-flags"><span class="flag f-dead">SUBMIT BY 11:30 PM — HARD BUFFER</span></div>
+    </div></div>
+    <div class="blk c-win"><div class="blk-inner">
+      <div class="blk-time">BY 11:59 PM</div>
+      <div class="blk-title">✅ NLP DELIVERABLE SUBMITTED</div>
+      <div class="blk-desc">Done. Log it. That's a real win. One deadline cleared, two to go.</div>
+    </div></div>
+    <div class="blk c-family"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:30 PM</div>
+      <div class="blk-title">👨‍👩‍👦 FAMILY TIME + LAST MEAL</div>
+    </div></div>
+    <div class="blk c-journal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:45 PM</div>
+      <div class="blk-title">📓 JOURNAL + NIGHT ROUTINE</div>
+    </div></div>
+    <div class="blk c-qiyam"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:05 AM</div>
+      <div class="blk-title">🌙 QIYAM AL-LAYL</div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">1:00 AM — TARGET</div>
+      <div class="blk-title">😴 SLEEP — ALARM: 3:47 AM (THU FAJR)</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ════════════════════ THURSDAY ════════════════════ -->
+<div class="page" id="thu">
+  <div class="day-hdr">
+    <div class="day-title-row">
+      <div class="day-name" style="color:#ffa726">THURSDAY <span style="color:var(--text2);font-size:22px">APR 16</span></div>
+      <div class="day-tags">
+        <div class="dtag" style="background:#2a1200;color:#ffa726;border:1px solid #3a1800">🌙 FAST DAY</div>
+        <div class="dtag" style="background:#1a0a2a;color:#ab47bc;border:1px solid #2a1040">UNI — FULL DAY</div>
+        <div class="dtag" style="background:#1a0808;color:#ef5350;border:1px solid #2a1010">⚡ PC QUIZ</div>
+        <div class="dtag" style="background:#1a0808;color:#ef5350;border:1px solid #2a1010">TGATES FINAL</div>
+      </div>
+    </div>
+    <div class="deadline-banner">
+      <div class="db-icon">⚡</div>
+      <div class="db-text">
+        <div class="db-title">PARALLEL COMPUTING QUIZ — 4:30–6:30 PM (PRACTICAL EXAM)</div>
+        <div class="db-note">Also: TGates must be delivered before tomorrow (Friday). Tonight is your last build window.</div>
+      </div>
+    </div>
+    <div class="sleep-card">
+      <div class="sc-item"><div class="sc-lbl">SLEEP BY</div><div class="sc-val">12:30 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">FAJR ALARM</div><div class="sc-val fj">3:47 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">BACK TO SLEEP</div><div class="sc-val">4:15 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">WAKE UP</div><div class="sc-val" style="color:#66bb6a">9:00 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">TOTAL SLEEP</div><div class="sc-val" style="color:#66bb6a">~7.5h</div></div>
+      <div class="sc-note">Fast day. Bring 3 Medjool dates to uni. Iftar at Maghrib 6:23 PM (during/after quiz).</div>
+    </div>
+    <div class="prayer-strip">
+      <div class="ps"><div class="ps-lbl fj">FAJR</div><div class="ps-time fj">03:57</div></div>
+      <div class="ps"><div class="ps-lbl dh">DHUHR</div><div class="ps-time dh">11:56</div></div>
+      <div class="ps"><div class="ps-lbl as">ASR</div><div class="ps-time as">03:31</div></div>
+      <div class="ps"><div class="ps-lbl ma">MAGHRIB / IFTAR</div><div class="ps-time ma">06:23</div></div>
+      <div class="ps"><div class="ps-lbl is">ISHA</div><div class="ps-time is">07:44</div></div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="blk c-fajr"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:47 AM alarm → 3:57 AM</div>
+      <div class="blk-title">🕌 FAJR + 📿 MORNING AZKAR</div>
+      <div class="blk-flags"><span class="flag f-nn">NON-NEGOTIABLE</span><span class="flag f-fast">FAST STARTS</span></div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-time">4:15 AM – 9:00 AM</div>
+      <div class="blk-title">😴 SECOND SLEEP</div>
+    </div></div>
+    <div class="blk c-routine"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">9:00 – 9:20 AM</div>
+      <div class="blk-title">🌅 MORNING ROUTINE (FAST DAY)</div>
+      <div class="blk-desc">Water only. Freshen. Pack: laptop, 3 Medjool dates, notebook for quiz.</div>
+    </div></div>
+    <div class="blk c-quran"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">9:20 – 10:05 AM</div>
+      <div class="blk-title">📖 QURAN WERD — 20 pages</div>
+    </div></div>
+    <div class="blk c-study"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:05 – 11:20 AM</div>
+      <div class="blk-title">🎓 PC QUIZ PREP — 1.5 hours</div>
+      <div class="blk-desc">Review practical lab content. Run through the code/commands you'll need to execute. Hands-on practice if you have the environment. This is a practical exam — muscle memory matters more than theory.</div>
+      <div class="blk-flags"><span class="flag f-quiz">QUIZ TODAY 4:30 PM</span></div>
+    </div></div>
+    <div class="blk c-hifz"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:20 – 11:35 AM</div>
+      <div class="blk-title">🧠 HIFZ / REVISION</div>
+    </div></div>
+    <div class="blk c-travel"><div class="blk-inner">
+      <div class="blk-time">11:35 AM – 12:15 PM</div>
+      <div class="blk-title">🚗 DRIVE TO UNI + 🕌 DHUHR</div>
+      <div class="blk-desc">Leave 11:35 AM. Pray Dhuhr at uni before labs start at 12:30 PM (window: 11:56 AM). Dhuhr can be prayed in car or at uni on arrival.</div>
+    </div></div>
+    <div class="blk c-study"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:30 – 2:30 PM</div>
+      <div class="blk-title">🎓 NLP APPLICATIONS — LAB</div>
+      <div class="blk-desc">Focus. Apply. This is hands-on. Engage fully.</div>
+    </div></div>
+    <div class="blk c-study"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">2:30 – 4:30 PM</div>
+      <div class="blk-title">🎓 IDSS — LAB</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:31 PM — between labs</div>
+      <div class="blk-title">🕌 ASR + 📿 NIGHT AZKAR</div>
+      <div class="blk-desc">Pray at uni between IDSS and PC lab. Night Azkar (15 min) if time allows.</div>
+    </div></div>
+    <div class="blk c-study"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">4:30 – 6:30 PM</div>
+      <div class="blk-title">🎓 ⚡ PARALLEL COMPUTING — LAB + QUIZ</div>
+      <div class="blk-desc">Practical exam. Stay calm. Apply what you practiced this morning. You prepared — trust the preparation.</div>
+      <div class="blk-flags"><span class="flag f-quiz">PRACTICAL EXAM</span></div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:23 PM — at or right after quiz</div>
+      <div class="blk-title">🕌 MAGHRIB = IFTAR 🌙</div>
+      <div class="blk-desc">Break fast with 3 Medjool dates you brought. Pray Maghrib immediately. You earned this iftar — you fasted through a full uni day and a practical exam. MashaAllah.</div>
+      <div class="blk-flags"><span class="flag f-iftar">IFTAR 6:23 PM</span></div>
+    </div></div>
+    <div class="blk c-travel"><div class="blk-inner">
+      <div class="blk-time">6:30 – 7:30 PM</div>
+      <div class="blk-title">🚗 DRIVE HOME (rush hour — ~1h)</div>
+    </div></div>
+    <div class="blk c-meal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">7:30 – 8:00 PM</div>
+      <div class="blk-title">🍗 IFTAR PROPER MEAL + 🕌 ISHA</div>
+      <div class="blk-desc">Real food. Big meal. You've been fasted and active all day. Eat properly. Isha at 7:44 PM.</div>
+    </div></div>
+    <div class="blk c-delivery"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">8:00 – 11:00 PM</div>
+      <div class="blk-title">💼 TGATES — FINAL DELIVERY PUSH</div>
+      <div class="blk-desc">3 hours. This is it. Integration testing. Final bug fixes. Clean up. Documentation. The agent must be production-ready. Deliver before you sleep tonight or first thing Friday morning. Do not let it slip to Friday afternoon.</div>
+      <div class="blk-flags"><span class="flag f-dead">DELIVER BEFORE FRIDAY</span></div>
+    </div></div>
+    <div class="blk c-family"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:00 – 11:30 PM</div>
+      <div class="blk-title">👨‍👩‍👦 FAMILY TIME</div>
+    </div></div>
+    <div class="blk c-me2"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:30 PM</div>
+      <div class="blk-title">🎮 ME TIME — SECTION 2</div>
+      <div class="blk-desc">30 min max. You earned it. Heavy day fasted. One of the hardest days of the week.</div>
+    </div></div>
+    <div class="blk c-journal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:00 AM</div>
+      <div class="blk-title">📓 JOURNAL + NIGHT ROUTINE</div>
+    </div></div>
+    <div class="blk c-qiyam"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:15 AM</div>
+      <div class="blk-title">🌙 QIYAM AL-LAYL</div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:30 AM — TARGET</div>
+      <div class="blk-title">😴 SLEEP — ALARM: 3:46 AM (FRI FAJR)</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ════════════════════ FRIDAY ════════════════════ -->
+<div class="page" id="fri">
+  <div class="day-hdr">
+    <div class="day-title-row">
+      <div class="day-name" style="color:#66bb6a">FRIDAY <span style="color:var(--text2);font-size:22px">APR 17</span></div>
+      <div class="day-tags">
+        <div class="dtag" style="background:#0a1a0a;color:#66bb6a;border:1px solid #0d2a0d">🏀 HOBBY DAY</div>
+        <div class="dtag" style="background:#1a0808;color:#ef5350;border:1px solid#2a1010">TGATES DELIVER</div>
+        <div class="dtag" style="background:#150e00;color:#f5a623;border:1px solid #2a1a00">WEEK PLANNING</div>
+      </div>
+    </div>
+    <div class="sleep-card">
+      <div class="sc-item"><div class="sc-lbl">SLEEP BY</div><div class="sc-val">12:30 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">FAJR ALARM</div><div class="sc-val fj">3:46 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">BACK TO SLEEP</div><div class="sc-val">4:14 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">WAKE UP</div><div class="sc-val" style="color:#66bb6a">8:00 AM</div></div>
+      <div class="sc-item"><div class="sc-lbl">TOTAL SLEEP</div><div class="sc-val" style="color:#66bb6a">~7h</div></div>
+      <div class="sc-note">Earliest wake-up of the week. Start of new schedule pattern.</div>
+    </div>
+    <div class="prayer-strip">
+      <div class="ps"><div class="ps-lbl fj">FAJR</div><div class="ps-time fj">03:56</div></div>
+      <div class="ps"><div class="ps-lbl dh">DHUHR / JUMU'AH</div><div class="ps-time dh">11:55</div></div>
+      <div class="ps"><div class="ps-lbl as">ASR</div><div class="ps-time as">03:31</div></div>
+      <div class="ps"><div class="ps-lbl ma">MAGHRIB</div><div class="ps-time ma">06:23</div></div>
+      <div class="ps"><div class="ps-lbl is">ISHA</div><div class="ps-time is">07:45</div></div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="blk c-fajr"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:46 AM alarm → 3:56 AM</div>
+      <div class="blk-title">🕌 FAJR + 📿 MORNING AZKAR</div>
+      <div class="blk-flags"><span class="flag f-nn">NON-NEGOTIABLE</span></div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-time">4:14 AM – 8:00 AM</div>
+      <div class="blk-title">😴 SECOND SLEEP</div>
+    </div></div>
+    <div class="blk c-routine"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">8:00 – 8:30 AM</div>
+      <div class="blk-title">🌅 MORNING ROUTINE + FIRST MEAL</div>
+      <div class="blk-desc">First 8 AM wake-up of the week. This is the new standard. Celebrate quietly.</div>
+    </div></div>
+    <div class="blk c-quran"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">8:30 – 9:15 AM</div>
+      <div class="blk-title">📖 QURAN WERD — 20 pages</div>
+    </div></div>
+    <div class="blk c-hifz"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">9:15 – 9:30 AM</div>
+      <div class="blk-title">🧠 HIFZ / REVISION</div>
+    </div></div>
+    <div class="blk c-delivery"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">9:30 – 11:30 AM</div>
+      <div class="blk-title">💼 TGATES — FINAL DELIVERY</div>
+      <div class="blk-desc">2 hours. Final tests. Deploy. Hand off to team. Deliver before Jumu'ah. Do not let basketball get postponed because of this — finish it first.</div>
+      <div class="blk-flags"><span class="flag f-dead">DELIVER TODAY BEFORE NOON</span></div>
+    </div></div>
+    <div class="blk c-win"><div class="blk-inner">
+      <div class="blk-time">BY 11:30 AM</div>
+      <div class="blk-title">✅ TGATES RETAIL AGENT — DELIVERED 🎉</div>
+      <div class="blk-desc">5-day sprint complete. Production-ready AI retail agent. This is real work. Log it in the progress ledger.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:55 AM — JUMU'AH</div>
+      <div class="blk-title">🕌 JUMU'AH PRAYER</div>
+      <div class="blk-desc">Friday prayer. Go to masjid if possible. This is the anchor of the week.</div>
+    </div></div>
+    <div class="blk c-meal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">12:30 – 1:00 PM</div>
+      <div class="blk-title">🥗 PRE-BASKETBALL MEAL</div>
+      <div class="blk-desc">Carbs + protein. 30–90 min before game. Bread + chicken, or rice + egg. Hydrate well.</div>
+    </div></div>
+    <div class="blk c-workout"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">1:00 – 3:30 PM</div>
+      <div class="blk-title">🏀 BASKETBALL — HOBBY DAY</div>
+      <div class="blk-desc">30 min travel + game + 30 min back/shower. This is SESSION 4 of the week. It's also your reward for surviving the week. Play freely. No metrics. No agenda. Just fun.</div>
+      <div class="blk-flags"><span class="flag f-beta">WORKOUT 4 OF 4 ✓</span></div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">3:31 PM</div>
+      <div class="blk-title">🕌 ASR + 📿 NIGHT AZKAR</div>
+    </div></div>
+    <div class="blk c-me1"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">4:00 – 5:00 PM</div>
+      <div class="blk-title">🧠 ME TIME — SECTION 1</div>
+      <div class="blk-desc">Extended Friday reward block. AI deep-dive, business content, or something genuinely interesting. 1 hour.</div>
+    </div></div>
+    <div class="blk c-family"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">5:00 – 6:20 PM</div>
+      <div class="blk-title">👨‍👩‍👦 FAMILY TIME — EXTENDED</div>
+      <div class="blk-desc">Friday is family day. Be present. Eat together. Talk. No laptop at the table.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:23 PM</div>
+      <div class="blk-title">🕌 MAGHRIB</div>
+    </div></div>
+    <div class="blk c-routine"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">6:30 – 7:15 PM</div>
+      <div class="blk-title">📋 WEEK REFLECTION + NEXT WEEK PREP</div>
+      <div class="blk-desc">Review the week. What worked, what didn't, no judgment. Fill in the progress ledger. Prepare context for next Friday's planning session with me. Note: next week's plan will be a proper Fri→Thu plan.</div>
+    </div></div>
+    <div class="blk c-prayer"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">7:45 PM</div>
+      <div class="blk-title">🕌 ISHA</div>
+    </div></div>
+    <div class="blk c-me2"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">8:00 – 9:30 PM</div>
+      <div class="blk-title">🎮 ME TIME — SECTION 2</div>
+      <div class="blk-desc">Friday extended relax. Well-earned. 1.5 hours. But set a timer — still need to sleep well tonight to anchor the new schedule.</div>
+    </div></div>
+    <div class="blk c-journal"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">9:30 – 9:50 PM</div>
+      <div class="blk-title">📓 JOURNAL — EXTENDED FRIDAY VERSION</div>
+      <div class="blk-desc">Full week review. What shifted this week. What you're taking into next week. Make it a letter to your 25-year-old self.</div>
+    </div></div>
+    <div class="blk c-qiyam"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">10:00 PM</div>
+      <div class="blk-title">🌙 QIYAM AL-LAYL</div>
+      <div class="blk-desc">Full 11 rakaat if possible tonight — it's Friday night (the best night for Qiyam). 8 + 2 + 1.</div>
+    </div></div>
+    <div class="blk c-sleep"><div class="blk-inner">
+      <div class="blk-check" onclick="toggleDone(this)">✓</div>
+      <div class="blk-time">11:00 PM — TARGET</div>
+      <div class="blk-title">😴 SLEEP — EARLIEST OF THE WEEK</div>
+      <div class="blk-desc">This is the new anchor. Next week begins tomorrow (Saturday). Fajr alarm set for 3:45 AM Saturday. This sleep time is what Week 2 builds on.</div>
+    </div></div>
+  </div>
+</div>
+
+</div><!-- end .content -->
+
+<footer>ZERO TO HERO · WEEK 01 · APR 12–17 · 2026 · CAIRO, EG · EGYPTIAN GENERAL AUTHORITY OF SURVEY PRAYER TIMES</footer>
+
+<script>
+function sw(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+function tabAt(i) { return document.querySelectorAll('.tab')[i]; }
+function switchTabById(id) {
+  const tabs = document.querySelectorAll('.tab');
+  const map = {ov:0,rt:1,pr:2,sun:3,mon:4,tue:5,wed:6,thu:7,fri:8};
+  sw(id, tabs[map[id]]);
+}
+function toggleDone(el) {
+  const blk = el.closest('.blk');
+  blk.classList.toggle('done');
+  el.textContent = blk.classList.contains('done') ? '✓' : '✓';
+}
+// highlight active tab for overview on load
+document.querySelectorAll('.tab')[0].classList.add('active');
+</script>
+</body>
+</html>
